@@ -4,7 +4,13 @@ package package1.Java_project539;
 /*This code was generated using the UMPLE 1.21.0.4678 modeling language!*/
 
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
+
+import javax.swing.JComponent;
+
+import package1.MapModeler;
 
 /**
  * Unable to update umple code due to error at [104,2]
@@ -16,6 +22,7 @@ import java.util.*;
 // line 7 "model.ump"
 // line 183 "model.ump"
 public class Map
+//public class Map extends JComponent
 {
 
   //------------------------
@@ -50,6 +57,8 @@ public class Map
       throw new RuntimeException("Unable to create Map due to aGrid");
     }
     grid = aGrid;
+    
+    // TODO remove if unnecessary addListeners();
   }
 
   public Map(int aSizeX, int aSizeY)
@@ -537,14 +546,19 @@ public class Map
   }
 
   // line 13 "model.ump"
-   public void save(){
-    
-  }
+   public void save()
+   {
+      // TODO Ran 
+	   
+   }
 
   // line 16 "model.ump"
-   public void load(){
-    
-  }
+   public void load()
+   {
+	  // TODO Ran 
+	   
+	   
+   }
 
 
   public String toString()
@@ -556,11 +570,267 @@ public class Map
             "  " + "grid = "+(getGrid()!=null?Integer.toHexString(System.identityHashCode(getGrid())):"null")
      + outputString;
   }  
+  
+  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
+  // [was deleted because did not compile - failure copy of save() and load()
   
+  
+  
+//------------------------
+  // DEVELOPER CODE 
+  //------------------------
 
+  
+//  private void addListeners()
+//  {
+////	  	this.addMouseListener(new MouseAdapter()
+////		{
+////			public void mousePressed(MouseEvent e)
+////			{
+////				// TODO 
+////				
+////			}
+////		});
+//	  	
+//	  	this.addMouseMotionListener(new MouseAdapter()
+//		{
+//	  		public void mouseEntered(MouseEvent e)
+//	  		{
+//	  			
+//	  			
+//	  		}
+//	  		
+//	  		public void mouseExited(MouseEvent e)
+//	  		{
+//	  			
+//	  		}
+//	  		
+//	  		public void mouseMoved(MouseEvent e)
+//	  		{
+//	  			
+//	  		}
+//	  		
+//			public void mousePressed(MouseEvent e)
+//			{
+//				// TODO 
+//				
+//			}
+//		});
+//	  	
+//	  	
+//	  
+//  }
+  
+  
+  // TODO JB Pathfinding
+//  public Path runPathFinding(Tile start, Tile destination, int unitRadius)
+//  {
+//	  // or maybe do ASTar?
+//	  
+//  }
+  
+  // copied from Labyrinth
+//  public ArrayList<Integer> doDijikstra(int entrX, int entrY, int destX, int destY, boolean printComp) 
+//  {
+//	TileVertex entrance = getVertexAtXY(entrX, entrY);
+//	TileVertex goal = getVertexAtXY(destX, destY);
+//		
+//	ArrayList<TileVertex> listUnvisited = new ArrayList<TileVertex>();
+//	for(TileVertex tv : listTiles)
+//	{
+//		listUnvisited.add(tv);
+//	}
+//	listUnvisited.remove(entrance);
+//	entrance.markVisited();
+//	entrance.setDistance(0);
+//	goal.setToBeDestination(true);
+//	
+//	TileVertex current = entrance;
+//	boolean victory = false;
+//	while(!listUnvisited.isEmpty() && !victory)
+//	{
+//		victory = applyDijikstraAtCurrent(current, listUnvisited);
+//		int optDist = Integer.MAX_VALUE;
+//		TileVertex optimal = null;
+//		for(TileVertex tv : listUnvisited)
+//		{
+//			if(tv.getDistance() < optDist)
+//			{
+//				optDist = tv.getDistance();
+//				optimal = tv;
+//			}
+//		}
+//		if(optimal == null)
+//		{
+//			listUnvisited.clear();
+//			System.out.println("Optimal not found");
+//			for(TileVertex tv : listTiles)
+//			{
+//				System.out.println(tv);
+//			}
+//			for(TileVertex tv : listUnvisited)
+//			{
+//				System.out.println("Unvisited tile: distance " + tv.getDistance());
+//			}
+//			System.out.println("Optimal distance: " + optDist);
+//		}
+//		current = optimal;
+//	}
+//	if(victory)
+//	{
+//		System.out.println("Victory Dijikstra!!");
+//		ArrayList<Integer> path = new ArrayList<Integer>();
+//		ArrayList<Point> path2 = new ArrayList<Point>();
+//		TileVertex through = goal;
+//		path.add(0, through.getIndex());
+//		path2.add(0, new Point(through.x, through.y));
+//		while(through != entrance)
+//		{
+//			
+//			through = through.getPrevious();
+//			path.add(0, through.getIndex());
+//			path2.add(0, new Point(through.x, through.y));
+//		}
+//		if(printComp)
+//		{
+//			System.out.println(path);
+//			System.out.println(path2);
+//		}
+//		return path;
+//	}
+//	else
+//	{
+//		System.out.println("Failed in finding solution for Dijikstra");
+//		System.err.println("Dijikstra failed: graph badly generated, this should not happen so system exited.");
+//		//failed in finding solution
+//		System.exit(0);
+//		return null;
+//	}
+//		
+//		
+//		
+//  } // end Dijikstra
+  
+//  public ArrayList<Point> doAStar(int entranceX, int entranceY, int destX, int destY, boolean printComp) {
+//		TileVertex entrance = getVertexAtXY(entranceX, entranceY);
+//		TileVertex goal = getVertexAtXY(destX, destY);
+//		//System.out.println("Destination: "+ destX + "," + destY + " ID: " + goal.getIndex());
+//		entrance.setDistance(0);
+//		goal.setToBeDestination(true);
+//		
+//		// ArrayList<TileVertex>
+//		// TileVertex
+//		
+//		ArrayList<TileVertex> openList = new ArrayList<TileVertex>();
+//		ArrayList<TileVertex> closedList = new ArrayList<TileVertex>();
+//		openList.add(entrance);
+//		for(TileVertex tv : listTiles)
+//		{
+//			tv.setDistance(Integer.MAX_VALUE / 2);
+//			tv.calculateHValue(gridLength / 2); // calculate the heuristic using the center point as a basis
+//			tv.calculateFValue();
+//		}
+//		
+//		boolean victory = false;
+//		while(!victory && openList.size() != 0)
+//		{
+//			int bestF = Integer.MAX_VALUE;
+//			TileVertex currentVertex = null;
+//			for(TileVertex tv : openList)
+//			{
+//				//System.out.println("Parsing openlist, vertex: " + tv.x + "," + tv.y + " ID: " + tv.getIndex());
+//				/*if(tv.x == 5 && tv.y == 5)
+//				{
+//					System.out.println("55, tv: " + tv + " goal: " + goal);
+//				}*/
+//				if(tv.getFValue() < bestF)
+//				{
+//					bestF = tv.getFValue();
+//					currentVertex = tv;
+//					/*if(tv.x == 5 && tv.y == 5)
+//					{
+//						System.out.println("55, currentVertex: " + currentVertex + " goal: " + goal);
+//					}*/
+//					/*if(currentVertex == goal)
+//					{
+//						System.out.println("Exit found");
+//					}*/
+//				}
+//			}
+//			openList.remove(currentVertex);
+//			closedList.add(currentVertex);
+//			if(currentVertex == null)
+//			{
+//				System.out.println("Null vertex found");
+//				System.out.println("Best F value: " + bestF + " size of openlist: " + openList.size());
+//				for(TileVertex t : openList)
+//				{
+//					System.out.println(t);
+//				}
+//			}
+//			for(TileVertex tv : currentVertex.getAdjacency())
+//			{
+//				if(!closedList.contains(tv))
+//				{
+//					if(!openList.contains(tv))
+//					{
+//						openList.add(tv);
+//						tv.setPrevious(currentVertex);
+//					}
+//					else // if it is already on the open list
+//					{
+//						if(tv.getGValue()+1 < currentVertex.getGValue()) // if going through tv would mean a better path
+//						{
+//							tv.setPrevious(currentVertex);
+//							currentVertex.setDistance(tv.getGValue() + 1);
+//							currentVertex.calculateFValue();
+//						}
+//					}
+//					
+//				}
+//			}
+//			if(currentVertex.isGoal())
+//			{
+//				victory = true;
+//				
+//			}
+//			
+//		}
+//		if(victory)
+//		{
+//			//victory!
+//			System.out.println("A-Star Victory!!!");
+//			ArrayList<Integer> path = new ArrayList<Integer>();
+//			ArrayList<Point> path2 = new ArrayList<Point>();
+//			TileVertex through = goal;
+//			path.add(0, through.getIndex());
+//			path2.add(0, new Point(through.x, through.y));
+//			while(through != entrance)
+//			{
+//				
+//				through = through.getPrevious();
+//				path.add(0, through.getIndex());
+//				path2.add(0, new Point(through.x, through.y));
+//			}
+//			if(printComp)
+//			{
+//				System.out.println(path);
+//				System.out.println(path2);
+//			}
+//			return path2;
+//		}
+//		else
+//		{
+//			//defeat
+//			System.out.println("A-Star defeat!");
+//			return null;
+//		}
+//		
+//	}
+  
   
 }

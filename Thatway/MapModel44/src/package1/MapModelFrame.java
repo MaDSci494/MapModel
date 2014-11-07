@@ -1,70 +1,120 @@
 package package1;
 
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class MapModelFrame extends JFrame {
+public class MapModelFrame extends JFrame 
+{
+	
+	private static MapModelFrame mainFrame;
+	
+	JTextField lengthField;
+	JTextField heightField;
+	JLabel descLabel;
 
+	public static MapModelFrame getInstance()
+	{
+		return mainFrame;
+	}
+	
 	public MapModelFrame()
 	{
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(1000, 800);
-		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE); // If you press x, exit the program.
 		
 		// Create menu bar
 		MapModelMenuBar menuBar = new MapModelMenuBar();
 		this.setJMenuBar(menuBar);
 		
 		
-		generateFirstFrame();
+		generateFirstPage();
 		
-		
-		pack();
-		this.setVisible(true);
+		this.setVisible(true); // yeah, that might help
+		this.setLocation(200, 100);
+		this.setSize(1300, 800);
 	}
-	
-	private void generateFirstFrame()
+
+	private void generateFirstPage()
 	{
+		descLabel = new JLabel("Provide values for creating a new map.");
+		lengthField = new JTextField("26"); // suggested values.
+		heightField = new JTextField("32");
+		lengthField.setPreferredSize(new Dimension(60, 30));
+		heightField.setPreferredSize(new Dimension(60, 30));
 		
-		
-		JTextField lengthField = new JTextField("Enter length");
-		JTextField heightField = new JTextField("Enter height");
-		JButton buttonGo = new JButton("Go");
+		JButton buttonGo = new JButton("Go (values recommended between 1 and 300)");
 		
 		buttonGo.addMouseListener(new MouseAdapter()
 		{
 			public void mousePressed(MouseEvent e)
 			{
-				// TODO add frame over
-			    
+				int length = Integer.parseInt(lengthField.getText());
+				int height = Integer.parseInt(heightField.getText());
+				if (length == 0 || height == 0 || length >= 500 || height >= 500)
+				{
+					descLabel.setText("INPUT DENIED. The values must be bigger than 0, and smaller than 500.");
+				}
+				else
+				{
+					MapModeler.GetInstance().generateNewMap(length, height);
+					mainFrame.fillWithMapModeler();
+				}
 			}
 		});
 		
-		
+		// Add directly in line the visual elements to ask for map dimensions.
 		JPanel mainPanel = new JPanel();
 		mainPanel.add(lengthField);
 		mainPanel.add(heightField);
 		mainPanel.add(buttonGo);
 		
-		this.add(mainPanel);
-		
-		
+		this.getContentPane().add(mainPanel);
 	}
 	
-	
-	
-	public static void main(String[] args)  {
-		System.out.println("This project will be done in time");
-		MapModelFrame mainFrame = new MapModelFrame();
+	// this function should be called when loading a map, AFTER assigning it to the MapModeler.
+	// If the MapModeler has no map, this will do nothing.
+	private void fillWithMapModeler() 
+	{
+		MapModeler model = MapModeler.GetInstance();
+	    
+		if (!model.hasMap())
+			return;
 		
+		this.getContentPane().remove(0);
 		
+		// TODO Ran could add a leftmost panel for Level tabs?
+		LevelPanel leftPanel = new LevelPanel(model.getMapWidth(), model.getMapHeight());
+		OptionsPanel rightPanel = new OptionsPanel();
+		
+		leftPanel.setBounds(0, 0, Constants.LEVEL_PANE_WIDTH, Constants.LEVEL_PANE_HEIGHT);
+		
+		GroupLayout layout = new GroupLayout(this.getContentPane());
+		this.getContentPane().setLayout(layout);
+		
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+				.addComponent(leftPanel)
+				.addComponent(rightPanel)
+		);
+		
+		layout.setVerticalGroup(layout.createParallelGroup()
+				.addComponent(leftPanel)
+				.addComponent(rightPanel)
+		);
+	}
+
+	public static void main(String[] args)  
+	{
+		System.out.println("This project will be done in time and it will be marvelous!");
+		mainFrame = new MapModelFrame();
 	}
 
 }

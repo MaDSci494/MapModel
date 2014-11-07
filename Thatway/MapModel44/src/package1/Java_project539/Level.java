@@ -4,11 +4,18 @@ package package1.Java_project539;
 /*This code was generated using the UMPLE 1.21.0.4678 modeling language!*/
 
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
+
+import javax.swing.JComponent;
+
+import package1.MapModeler;
 
 // line 66 "model.ump"
 // line 239 "model.ump"
-public class Level
+public class Level extends JComponent
+//public class Level
 {
 
   //------------------------
@@ -231,4 +238,58 @@ public class Level
             "  " + "map = "+(getMap()!=null?Integer.toHexString(System.identityHashCode(getMap())):"null")
      + outputString;
   }
+  
+  
+  // Developper code
+  
+  private void addListeners()
+  {
+//	  	this.addMouseListener(new MouseAdapter()
+//		{
+//			public void mousePressed(MouseEvent e)
+//			{
+//				// TODO 
+//				
+//			}
+//		});
+	  	
+	  	this.addMouseMotionListener(new MouseAdapter()
+		{
+	  		public void mouseEntered(MouseEvent e)
+	  		{
+	  			System.out.println("Mouse entered over map");
+	  			// TODO Rubing: display ramps where they would appear if clicked right now 
+	  		}
+	  		
+	  		public void mouseExited(MouseEvent e)
+	  		{
+	  			// TODO Rubing: when we exit the map with the mouse, last ramp or water should disappear
+	  		}
+	  		
+	  		public void mouseMoved(MouseEvent e)
+	  		{
+	  			// TODO Rubing: using the MouseEvent, you should calculate if anything can be placed down. 
+	  			// For this, I suggest using triggers in MapModeler.GetInstance() (ex: 
+	  		}
+	  		
+			public void mousePressed(MouseEvent e)
+			{
+				// TODO Rubing 
+				// add ramp, water tile, rock tile, etc.
+				
+				// IF nothing was to add, then implement tile selection. 
+				// I suggest using MapModeler.getInstance().getCurrentSelection().addTiles([current tiles]);
+				// although this should only be called on MouseReleased, while mousePressed should ititialize [current tiles] to one tile
+				
+				
+				MapModeler.GetInstance().clearAllTriggers();
+			}
+		});
+	  	
+	  	
+	  
+  }
+  
+  
+  
 }
