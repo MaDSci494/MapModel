@@ -42,6 +42,7 @@ public class OptionsPanel extends JPanel
 	private JButton makeIntoWaterButton = new JButton("Make selection into water");
 	private JButton addWaterButton = new JButton("Add water");
 	
+	//Ran: I put new level button with tabs
 	private JButton newLevelButton = new JButton("Add new level");
 	
 	String[] optionsPatterns = {"[type height between -100 and 100]" };

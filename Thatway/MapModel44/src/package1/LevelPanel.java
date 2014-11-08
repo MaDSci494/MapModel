@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import package1.Java_project539.Level;
+
 public class LevelPanel extends JPanel 
 {
 	private int tileX;// width of a tile in terms of pixels
@@ -14,7 +16,9 @@ public class LevelPanel extends JPanel
 	private int levelWidth;
 	private int levelHeight;
 
-	public LevelPanel(int width, int height) 
+	private Level level;
+	
+	public LevelPanel(int width, int height, int levelNum) 
 	{
 		super();
 
@@ -37,7 +41,8 @@ public class LevelPanel extends JPanel
 			System.out.println("Problem - given width or height is 0");
 			System.err.println("Error - given width or height is 0");
 		}
-
+		
+		level = MapModeler.GetInstance().getMap().getLevel(levelNum);
 	}
 
 	@Override

@@ -76,5 +76,20 @@ public class MapModeler
 		// TODO remove others
 		
 	}
-
+	//Ran's helper functions
+	//TODO Ran: load & save function, map.java should only contain data and let modeler deal with saving
+	public void saveMap(String path)
+	{
+		
+		
+	}
+	
+	public void loadMap(String path)
+	{
+		
+	}
+	
+	public Map getMap(){
+		return map;
+	}
 }
