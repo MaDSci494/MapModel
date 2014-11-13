@@ -107,7 +107,7 @@ public class OptionsPanel extends JPanel
 				
 				//??how to call add rampIcon function in LevelPanel?? the code below doesn't not work as planned.
 				
-			LevelPanel levelp=new LevelPanel(26,32);
+			LevelPanel levelp=new LevelPanel(26,32,0);
 			levelp.addRampIcon();
 			
 			

@@ -14,7 +14,13 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import package1.Java_project539.Level;
+import package1.Java_project539.Map;
 
 public class MapModelFrame extends JFrame 
 {
@@ -96,7 +102,7 @@ public class MapModelFrame extends JFrame
 	// If the MapModeler has no map, this will do nothing.
 	public void fillWithMapModeler()   //RX change from private to public
 	{
-		MapModeler model = MapModeler.GetInstance();
+		final MapModeler model = MapModeler.GetInstance();
 	    
 		if (!model.hasMap())
 			return;
@@ -104,8 +110,43 @@ public class MapModelFrame extends JFrame
 		this.getContentPane().remove(0);
 		
 		// TODO Ran could add a leftmost panel for Level tabs?
-		LevelPanel leftPanel = new LevelPanel(model.getMapWidth(), model.getMapHeight());
-		OptionsPanel rightPanel = new OptionsPanel();
+		//TODO Ran add a leftmost panel for Level tabs
+				//LevelPanel leftPanel = new LevelPanel(model.getMapWidth(), model.getMapHeight());
+				final JTabbedPane leftPanel = new JTabbedPane(JTabbedPane.LEFT,JTabbedPane.WRAP_TAB_LAYOUT);
+				final Map map = model.getMap();
+				
+				//the levels of current map
+				for(int i=0;i<map.numberOfLevels();i++){
+					LevelPanel levelPane = new LevelPanel(model.getMapWidth(), model.getMapHeight(),i);
+					leftPanel.addTab((String)("Level "+i),levelPane);
+				}
+				//new level button
+				leftPanel.addTab("+",null);	
+						
+				//change listener for tabbedpane
+				leftPanel.addChangeListener(new ChangeListener(){
+					@Override
+					public void stateChanged(ChangeEvent e) {
+						int index = leftPanel.getSelectedIndex();
+						if(index == leftPanel.indexOfTab("+")){
+							int levelnum = leftPanel.getTabCount()-1;
+							map.addLevel(new Level(levelnum,levelnum,map));
+							LevelPanel levelPane = new LevelPanel(model.getMapWidth(), model.getMapHeight(),levelnum);
+							//Ran:	when you add a level, it will trigger the stateChange again
+							//		will get into infinite loop and stackoverflow if you do nothing
+							
+							//call mapModeler to insert a new level
+							MapModeler.GetInstance().insertLevel();
+							
+							leftPanel.remove(index);
+							leftPanel.addTab("Level "+levelnum,levelPane);
+							leftPanel.addTab("+",null);
+							leftPanel.setSelectedIndex(index);//focus on the new level
+						}
+					}
+
+				});
+				OptionsPanel rightPanel = new OptionsPanel();
 		
 		
 		leftPanel.setBounds(0, 0, Constants.LEVEL_PANE_WIDTH, Constants.LEVEL_PANE_HEIGHT);

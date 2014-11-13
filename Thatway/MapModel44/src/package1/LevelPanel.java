@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import package1.Java_project539.Level;
+
 import java.util.ArrayList; //RX
 import java.util.List; //RX
 import java.awt.event.*; //RX
@@ -27,6 +29,8 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 //	private int levelWidth;
 //	private int levelHeight;
 
+	private Level level;
+	
 	public static int levelWidth;
 	public static int levelHeight;
 	
@@ -37,7 +41,7 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	private Point selectedCell;
 	private Point selectedCell2;
 	
-	public LevelPanel(int width, int height) 
+	public LevelPanel(int width, int height, int levelNum) 
 	{
 		super();
 
@@ -60,6 +64,9 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			System.out.println("Problem - given width or height is 0");
 			System.err.println("Error - given width or height is 0");
 		}
+		
+		level = MapModeler.GetInstance().getMap().getLevel(levelNum);
+
 		
 //	addRampIcon();
 //		ramplabel=new JLabel(labelicon);
