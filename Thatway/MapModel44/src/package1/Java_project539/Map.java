@@ -61,6 +61,9 @@ public class Map
     // TODO remove if unnecessary addListeners();
   }
 
+  /*
+   * @param aSizeX aSizeY are map's logical size
+   */
   public Map(int aSizeX, int aSizeY)
   {
     sizeX = aSizeX;
@@ -70,9 +73,19 @@ public class Map
     roads = new ArrayList<Road>();
     levels = new ArrayList<Level>();
     grid = new Grid(this);
-    
+    /*
     //Ran: map should have a level 0 as default //now we assume that no delete level function
-    addLevel(new Level(0,0,this));
+    //I will move those to mapmodeler since it only applies when a new map is created not old map loaded
+    Level level0 = new Level(0,0,this);
+    addLevel(level0);
+    //fill level0 with tiles
+    for(int i=0;i<sizeX;i++){
+    	for(int j=0;j<sizeY;j++){
+    		Tile temp = new Tile(i,j,null,new Height(0,0,0,0),level0); //height use (aHeight,R,G,B)
+    		level0.addTile(temp);
+    	}
+    }
+    */
   }
 
   //------------------------

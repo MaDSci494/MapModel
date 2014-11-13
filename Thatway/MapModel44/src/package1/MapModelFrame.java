@@ -123,6 +123,10 @@ public class MapModelFrame extends JFrame
 					LevelPanel levelPane = new LevelPanel(model.getMapWidth(), model.getMapHeight(),levelnum);
 					//Ran:	when you add a level, it will trigger the stateChange again
 					//		will get into infinite loop and stackoverflow if you do nothing
+					
+					//call mapModeler to insert a new level
+					MapModeler.GetInstance().insertLevel();
+					
 					leftPanel.remove(index);
 					leftPanel.addTab("Level "+levelnum,levelPane);
 					leftPanel.addTab("+",null);

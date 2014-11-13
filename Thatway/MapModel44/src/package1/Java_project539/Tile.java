@@ -40,11 +40,13 @@ public class Tile
     coorX = aCoorX;
     coorY = aCoorY;
     ramps = new ArrayList<Ramp>();
+    /* Ran: I comment these cause don't know what to deal with Terrian now
     boolean didAddTerraintype = setTerraintype(aTerraintype);
     if (!didAddTerraintype)
     {
       throw new RuntimeException("Unable to create tile due to terraintype");
     }
+    */
     paths = new ArrayList<Path>();
     neighour = new ArrayList<Tile>();
     boolean didAddHeight = setHeight(aHeight);

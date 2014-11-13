@@ -1,8 +1,15 @@
 package package1;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import package1.Java_project539.Height;
 import package1.Java_project539.Level;
 import package1.Java_project539.Map;
 import package1.Java_project539.Tile;
@@ -34,6 +41,16 @@ public class MapModeler
 	public void generateNewMap(int length, int height) 
 	{
 		map = new Map(length, height);
+		//Ran: new level 0 to map
+		Level level0 = new Level(0,0,map);
+	    map.addLevel(level0);
+	    //fill level0 with tiles
+	    for(int i=0;i<length;i++){
+	    	for(int j=0;j<length;j++){
+	    		Tile temp = new Tile(i,j,null,new Height(0,0,0,0),level0); //height use (aHeight,R,G,B)
+	    		level0.addTile(temp);
+	    	}
+	    }
 	}
 
 	public boolean hasMap() 
@@ -80,8 +97,51 @@ public class MapModeler
 	//TODO Ran: load & save function, map.java should only contain data and let modeler deal with saving
 	public void saveMap(String path)
 	{
-		
-		
+		XMLOutputFactory xof = XMLOutputFactory.newInstance();
+		try {
+			XMLStreamWriter writer = xof.createXMLStreamWriter(new FileWriter(path));
+			//start document
+			writer.writeStartDocument("utf-8","1.0");
+			//identification element
+			writer.writeStartElement("MapModel44");
+			writer.writeAttribute("Version","1.0");
+			writer.writeEndElement();
+			//start map
+			writer.writeStartElement("Map");
+			writer.writeAttribute("sizeX",String.valueOf(map.getSizeX()));
+			writer.writeAttribute("sizeY",String.valueOf(map.getSizeY()));
+			//Ran: Currently I will only save all levels
+			for(int i=0;i<map.numberOfLevels();i++){
+				//start new level
+				writer.writeStartElement("Level");
+				Level l = map.getLevel(i);
+				writer.writeAttribute("levelnum",String.valueOf(l.getLevelnum()));
+					for(int j=0;j<l.numberOfTiles();j++){
+						//start new tile
+						writer.writeStartElement("Tile");
+						Tile t = l.getTile(j);
+						writer.writeAttribute("coorX",String.valueOf(t.getCoorX()));
+						writer.writeAttribute("coorY",String.valueOf(t.getCoorY()));
+						//Ran: then I need to save tile's other attributes but I need progress from Rubing
+						//end tile
+						writer.writeEndElement();
+					}
+				//end level
+				writer.writeEndElement();
+			}
+			//end map
+			writer.writeEndElement();
+			//close document
+			writer.flush();
+			writer.close();
+			
+		} catch (XMLStreamException e) {
+			System.out.println("Error xml writer.");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Error writing file " + path);
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadMap(String path)
@@ -91,5 +151,19 @@ public class MapModeler
 	
 	public Map getMap(){
 		return map;
+	}
+	
+	public void insertLevel(){ //insert new level to map the model
+		int levelnum = map.numberOfLevels();//since we are counting from level 0
+		Level templevel = new Level(levelnum,levelnum,map);
+	    map.addLevel(templevel);
+	    //fill leveltemp with tiles
+	    for(int i=0;i<map.getSizeX();i++){
+	    	for(int j=0;j<map.getSizeY();j++){
+	    		Tile temp = new Tile(i,j,null,new Height(0,0,0,0),templevel); //height use (aHeight,R,G,B)
+	    		templevel.addTile(temp);
+	    	}
+	    }
+	   
 	}
 }
