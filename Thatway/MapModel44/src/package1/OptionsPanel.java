@@ -6,19 +6,30 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+
 
 public class OptionsPanel extends JPanel
 {
 	private JButton addRampButton = new JButton("Add Ramp");
-	
+
+
 	///////////////////////////////////////////////////////////////
 	private JLabel originTileXLabel = new JLabel("Origin X: ");
 	private JTextField originXField = new JTextField("0");
@@ -56,6 +67,8 @@ public class OptionsPanel extends JPanel
 	private JButton unaccessibleTerrainButton = new JButton("Make a tile unaccessible");
 	private JButton accessibleTerrainButton = new JButton("Make a tile accessible");
 	
+	public static JLabel ramplabel; //RX
+	public static ImageIcon labelicon = new ImageIcon("src/images/ramp.png","ramp"); //RX
 	
 	public OptionsPanel()
 	{
@@ -78,11 +91,10 @@ public class OptionsPanel extends JPanel
 		destinationXField.setMaximumSize(new Dimension(50, 30));
 		destinationYField.setMaximumSize(new Dimension(50, 30));
 		unitSizeField.setMaximumSize(new Dimension(50, 30));
-		
-		
+
 	}
 	
-	private void addListeners() 
+	public void addListeners() 
 	{
 		addRampButton.addMouseListener(new MouseAdapter()
 		{
@@ -90,12 +102,28 @@ public class OptionsPanel extends JPanel
 			{
 				addRampButton.setSelected(true);// to make it appear selected // TODO remove it after it's used or cancelled
 				MapModeler.GetInstance().switchToRampsMode();
+				
+				JOptionPane.showMessageDialog(null,"adding ramps to the map"); //RX
+				
+				//??how to call add rampIcon function in LevelPanel?? the code below doesn't not work as planned.
+				
+			LevelPanel levelp=new LevelPanel(26,32);
+			levelp.addRampIcon();
+			
+			
+				
 			}
+
+			
+			
 		});
 		
-		// TODO 
-		
+				
 	}
+	
+	// TODO 
+
+	 
 
 	private void setupLayout()
 	{
@@ -184,8 +212,10 @@ public class OptionsPanel extends JPanel
 						)
 		);
 		
-		
+	
 	}
+
+
 
 //	@Override
 //	public void paintComponent(Graphics g) {

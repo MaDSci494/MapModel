@@ -4,10 +4,13 @@ package package1.Java_project539;
 /*This code was generated using the UMPLE 1.21.0.4678 modeling language!*/
 
 
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 
 import package1.MapModeler;
@@ -248,7 +251,7 @@ public class Level extends JComponent
 //		{
 //			public void mousePressed(MouseEvent e)
 //			{
-//				// TODO 
+//				// TODO   
 //				
 //			}
 //		});
@@ -258,6 +261,8 @@ public class Level extends JComponent
 	  		public void mouseEntered(MouseEvent e)
 	  		{
 	  			System.out.println("Mouse entered over map");
+	  			// highlightTile(e.getLocationOnScreen());
+	  			
 	  			// TODO Rubing: display ramps where they would appear if clicked right now 
 	  		}
 	  		
@@ -279,17 +284,39 @@ public class Level extends JComponent
 				
 				// IF nothing was to add, then implement tile selection. 
 				// I suggest using MapModeler.getInstance().getCurrentSelection().addTiles([current tiles]);
-				// although this should only be called on MouseReleased, while mousePressed should ititialize [current tiles] to one tile
+				// although this should only be called on MouseReleased, while mousePressed should initialize [current tiles] to one tile
 				
 				
 				MapModeler.GetInstance().clearAllTriggers();
 			}
 		});
 	  	
+  }
+}
+  
+  
+			
+			// RX gridRollOver
+			//public void highlightTile(Point cursor)
+			
+		//	for (int i=0; i<button.tile;i++) 
+			//{JButton tile = buttonsp[i];
+			//Point tileLocation = tile.getLocationOnScreen();
+	        //double west =tileLocation.getX();
+	        //double east = tileLocation.getX()+tile.getWidth();
+	        //double south = tileLocation.getY();
+	        //double north = tileLocation.getY()+tile.getHeight();
+	        //boolean inRow = tile.getX()>west && tile.getX()<east;
+	        //boolean inCol=tile.getY()>south && tile.getY()<north;
+            //tile.setBackground(inBounds ? new Color(0xFFFF00) : null);
+		//	}
+			
+			
+				
+				
+	//		}
+			
+	//	});
+	  	
 	  	
 	  
-  }
-  
-  
-  
-}
