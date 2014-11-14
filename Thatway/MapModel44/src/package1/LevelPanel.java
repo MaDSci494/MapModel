@@ -14,11 +14,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+import javax.swing.event.MouseInputAdapter;
 
 import package1.Java_project539.Level;
 import package1.Java_project539.Tile;
-
 
 import java.util.ArrayList; //RX
 import java.util.List; //RX
@@ -43,17 +42,25 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	private List<Rectangle> cells;
 	private Point selectedCell;
 	private Point selectedCell2;
+	private Point selectedStart;
+	private int widthAbs;
+	private int heightAbs;
 	
 	private Tile selectedBegin;
 	private Tile selectedEnd;
 	private ArrayList<Tile> selectedTile = new ArrayList<Tile>();
 
+	private Point startPoint=null;
+	private Point endPoint=null;
+	
 
 	private ArrayList<RampDraw> rampdraw = new ArrayList<RampDraw>();
 
 	public LevelPanel(int width, int height, int levelNum) 
 	{
 		super();
+	
+        
 
 		if (width != 0 && height != 0) 
 		{
@@ -82,24 +89,50 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		//tile selection		
 		cells=new ArrayList<>(levelWidth*levelHeight);
 
+				
+//		class MyMouseListener extends MouseInputAdapter
+//		{
+
+			
 		 MouseAdapter mouseHandler;
 	     mouseHandler = new MouseAdapter() {
-	         @Override
+	    		private int xMin;
+	    		private int xMax;
+	    		private int yMin;
+	    		private int yMax;
+	    		
+	            
 	         public void mousePressed(MouseEvent e) {
-	        	  selectedCell2=null;
-	             Point point = e.getPoint();
 
-//<<<<<<< HEAD
-	             int width = getWidth();
+	        	 selectedStart=null;
+	        	 
+	       		 int width = getWidth();
 	             int height = getHeight();
 
-	             int cellWidth = width / levelWidth;
-	             int cellHeight = height / levelHeight;
-//=======
-	             int column = e.getX() / cellWidth;
-	             int row = e.getY() / cellHeight;
+	            int cellWidth = width / levelWidth;
+	            int cellHeight = height / levelHeight;
+	    
+	    		int xOffset = (width - (levelWidth * cellWidth)) / 2;
+	    		int yOffset = (height - (levelHeight * cellHeight)) / 2;
+	            
+	            //changed the way to calculate selected cells so it can go all directions
+	        	 startPoint = e.getPoint();
+	        	 endPoint =startPoint;
+	        	xMin = startPoint.x;
+	        	xMax = startPoint.x;
+	        	yMin = startPoint.y;
+	        	yMax = startPoint.y;
+	        	
+	         	
+//<<<<<<< HEAD
+
+
+	             int column = (startPoint.x-xOffset)/cellWidth;
+	             int row = (startPoint.y-yOffset)/cellHeight;
+	             
 	             
              selectedCell = new Point(column, row);
+             
              //Ran: get selected cell and this will be the beginning one
              selectedBegin = level.getTileByXY(column,row);
              System.out.println("click star->"+"start:"+selectedBegin.toString());
@@ -107,15 +140,73 @@ public class LevelPanel extends JPanel implements MouseMotionListener
              repaint();
 
          }
+//				this.addMouseMotionListener(new MouseMotionAdapter()
+//				{
+				public void mouseDragged(MouseEvent e) 
+				{
+
+
+			  		int width = getWidth();
+		            int height = getHeight();
+		            
+
+		            int cellWidth = width / levelWidth;
+		            int cellHeight = height / levelHeight;
+		            
+		    		int xOffset = (width - (levelWidth * cellWidth)) / 2;
+		    		int yOffset = (height - (levelHeight * cellHeight)) / 2;
+		    		
+					endPoint = e.getPoint();
+					xMin = Math.min(xMin,endPoint.x);
+					xMax = Math.max(xMax,endPoint.x);
+					yMin = Math.min(yMin,endPoint.y);
+					yMax = Math.min(yMax,endPoint.y);
+					
+					
+			        int column = (endPoint.x-xOffset)/cellWidth;
+		             int row = (endPoint.y-yOffset)/cellHeight;
+					selectedCell2 = new Point(column,row);
+					repaint();
+
+					
+
+		             
+				}
+				
+//				});
+				
+//			
+				
          //Ran: generate selected tiles list
          public void mouseReleased(MouseEvent e){
-        	//Ran:get selected cell and this will be end
-        	int width = getWidth();			
- 			int height = getHeight();
- 			int cellWidth = width/levelWidth;
- 			int cellHeight = height/levelHeight;
- 			int column = e.getX()/cellWidth;
- 			int row =e.getY()/cellHeight;
+//        	//Ran:get selected cell and this will be end
+
+        	 
+        	 
+        		int width = getWidth();
+	            int height = getHeight();
+
+	            int cellWidth = width / levelWidth;
+	            int cellHeight = height / levelHeight;
+	            
+	    		int xOffset = (width - (levelWidth * cellWidth)) / 2;
+	    		int yOffset = (height - (levelHeight * cellHeight)) / 2;
+        	 
+        	 int x=Math.min(startPoint.x, endPoint.x);
+        	 int y=Math.min(startPoint.y, endPoint.y);
+        
+        	 widthAbs = Math.abs(startPoint.x-endPoint.x)/cellWidth;
+        	 heightAbs = Math.abs(startPoint.y-endPoint.y)/cellHeight;
+        	 
+        	 int column = (x-xOffset)/cellWidth;
+        	 int row= (y-yOffset)/cellHeight;
+        	 
+        	 selectedStart = new Point(column,row);
+        	 startPoint =null;
+        	 
+        	 repaint();
+        	 
+        	 
         	selectedEnd = level.getTileByXY(column,row);
  			System.out.println("click end->"+"start:"+selectedBegin.toString()+"end:"+selectedEnd.toString());
  			//add all tiles between those to selectedlist
@@ -149,39 +240,14 @@ public class LevelPanel extends JPanel implements MouseMotionListener
  			}
  			System.out.println("");
          }
-     };
-     addMouseListener(mouseHandler);
-     addMouseMotionListener(mouseHandler);
-     
-	
-	     addMouseListener(mouseHandler);
-	     addMouseMotionListener(mouseHandler);
-	     
+
 		
-			this.addMouseMotionListener(new MouseMotionAdapter()
-			{
-			public void mouseDragged(MouseEvent e) 
-			{
+	
+		};
+			
+   addMouseListener(mouseHandler);
+   addMouseMotionListener(mouseHandler);
 
-				Point point2 = e.getPoint();
-				
-				int width = getWidth();			
-				int height = getHeight();
-
-				
-				int cellWidth = width/levelWidth;
-				int cellHeight = height/levelHeight;
-				
-				int column = e.getX()/cellWidth;
-				int row =e.getY()/cellHeight;
-				
-				selectedCell2 = new Point(column,row);
-				repaint();
-			}
-			
-			});
-			
-			
 //<<<<<<< HEAD
 		}
 		
@@ -189,8 +255,6 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	public void invalidate() {
 		selectedCell = null;
 		selectedCell2 = null;
-//=======
-//			selectedCell2 = new Point(column,row);
 			repaint();
 			
 		}
@@ -218,6 +282,8 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		//used new code to generate map 
 		int width = getWidth();
 		int height = getHeight();
+		
+
 
 		int cellWidth = width / levelWidth;
 		int cellHeight = height / levelHeight;
@@ -239,23 +305,16 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			}
 		}
 
-		if (selectedCell != null && selectedCell2 != null)
+			if (selectedStart !=null)
 		{
-
-			int widthT=(selectedCell2.x-selectedCell.x)*cellWidth;
-			int heightT=(selectedCell2.y-selectedCell.y)*cellHeight;
 
 			g2.setColor(Color.RED);		
-			g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,widthT,heightT);
-
+//			g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,widthT,heightT);
+			g2.fillRect(selectedStart.x*cellWidth+xOffset,selectedStart.y*cellHeight+yOffset,(widthAbs+1)*cellWidth,(heightAbs+1)*cellHeight);
+			
 		}
 
-		if (selectedCell !=null)
-		{
-			g2.setColor(Color.RED);
-			g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,cellWidth,cellHeight);
 
-		}
 		
 		g2.setColor(Color.GRAY);
 		for (Rectangle cell : cells) {
