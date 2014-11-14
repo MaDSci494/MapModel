@@ -130,8 +130,8 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	             int column = (startPoint.x-xOffset)/cellWidth;
 	             int row = (startPoint.y-yOffset)/cellHeight;
 	             
-	             
              selectedCell = new Point(column, row);
+
              
              //Ran: get selected cell and this will be the beginning one
              selectedBegin = level.getTileByXY(column,row);
@@ -167,9 +167,6 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		             int row = (endPoint.y-yOffset)/cellHeight;
 					selectedCell2 = new Point(column,row);
 					repaint();
-
-					
-
 		             
 				}
 				
@@ -195,8 +192,10 @@ public class LevelPanel extends JPanel implements MouseMotionListener
         	 int x=Math.min(startPoint.x, endPoint.x);
         	 int y=Math.min(startPoint.y, endPoint.y);
         
-        	 widthAbs = Math.abs(startPoint.x-endPoint.x)/cellWidth;
-        	 heightAbs = Math.abs(startPoint.y-endPoint.y)/cellHeight;
+        	 
+        	 widthAbs = Math.abs(selectedCell.x-selectedCell2.x);
+        	 heightAbs = Math.abs(selectedCell.y-selectedCell2.y);
+        	 
         	 
         	 int column = (x-xOffset)/cellWidth;
         	 int row= (y-yOffset)/cellHeight;
@@ -206,6 +205,7 @@ public class LevelPanel extends JPanel implements MouseMotionListener
         	 
         	 repaint();
         	 
+            
         	 
         	selectedEnd = level.getTileByXY(column,row);
  			System.out.println("click end->"+"start:"+selectedBegin.toString()+"end:"+selectedEnd.toString());
@@ -309,10 +309,18 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		{
 
 			g2.setColor(Color.RED);		
-//			g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,widthT,heightT);
 			g2.fillRect(selectedStart.x*cellWidth+xOffset,selectedStart.y*cellHeight+yOffset,(widthAbs+1)*cellWidth,(heightAbs+1)*cellHeight);
-			
+			repaint();
 		}
+			
+			if (selectedCell!=null)
+			{			g2.setColor(Color.RED);		
+			g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,cellWidth,cellHeight);
+			repaint();
+
+				
+			}
+		
 
 
 		
