@@ -22,7 +22,7 @@ public class MapModeler
 	private Map map;
 	
 	
-	private boolean rampsTrigger = false;
+	public boolean rampsTrigger = false;
 	private ArrayList<Tile> currentSelection = new ArrayList<Tile>();
 	
 	

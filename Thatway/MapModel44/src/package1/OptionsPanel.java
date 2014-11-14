@@ -103,12 +103,14 @@ public class OptionsPanel extends JPanel
 				addRampButton.setSelected(true);// to make it appear selected // TODO remove it after it's used or cancelled
 				MapModeler.GetInstance().switchToRampsMode();
 				
-				JOptionPane.showMessageDialog(null,"adding ramps to the map"); //RX
+				//JOptionPane.showMessageDialog(null,"adding ramps to the map"); //RX
+
+				
+		
 				
 				//??how to call add rampIcon function in LevelPanel?? the code below doesn't not work as planned.
-				
-			LevelPanel levelp=new LevelPanel(26,32,0);
-			levelp.addRampIcon();
+				//addRampIcon(true);  // not working..
+					
 			
 			
 				

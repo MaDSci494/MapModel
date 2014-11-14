@@ -19,6 +19,8 @@ import package1.Java_project539.Level;
 import java.util.ArrayList; //RX
 import java.util.List; //RX
 import java.awt.event.*; //RX
+import java.awt.image.BufferedImage;
+
 
 
 public class LevelPanel extends JPanel implements MouseMotionListener
@@ -26,13 +28,12 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	private int tileX;// width of a tile in terms of pixels
 	private int tileY;// height of a tile in terms of pixels
 
-//	private int levelWidth;
-//	private int levelHeight;
 
 	private Level level;
 	
 	public static int levelWidth;
 	public static int levelHeight;
+
 	
 	public static JLabel ramplabel; //RX
 	public static ImageIcon labelicon = new ImageIcon("src/images/ramp.png","ramp"); //RX
@@ -40,6 +41,8 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	private List<Rectangle> cells;
 	private Point selectedCell;
 	private Point selectedCell2;
+
+//	private ArrayList<Ramp> ramps = new ArrayList<Ramp>();
 	
 	public LevelPanel(int width, int height, int levelNum) 
 	{
@@ -66,43 +69,36 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		}
 		
 		level = MapModeler.GetInstance().getMap().getLevel(levelNum);
-
 		
-//	addRampIcon();
-//		ramplabel=new JLabel(labelicon);
-//		ramplabel.setBounds(15,225,labelicon.getIconWidth(),labelicon.getIconHeight());
-//		 this.add(ramplabel);
-//		    this.addMouseMotionListener(this);
 	
 		
 	//tile selection		
 	cells=new ArrayList<>(levelWidth*levelHeight);
 
-	
-	this.addMouseListener(new MouseAdapter()
-	{
-	
-		public void mousePressed(MouseEvent e) 
-		{
+	 MouseAdapter mouseHandler;
+     mouseHandler = new MouseAdapter() {
+         @Override
+         public void mousePressed(MouseEvent e) {
+        	  selectedCell2=null;
+             Point point = e.getPoint();
 
-			Point point = e.getPoint();
-			
-			int width = getWidth();			
-			int height = getHeight();
+             int width = getWidth();
+             int height = getHeight();
 
-			
-			int cellWidth = width/levelWidth;
-			int cellHeight = height/levelHeight;
-			
-			int column = e.getX()/cellWidth;
-			int row =e.getY()/cellHeight;
-			
-			
-			selectedCell = new Point(column,row);
-			
-			
-		}
-	});
+             int cellWidth = width / levelWidth;
+             int cellHeight = height / levelHeight;
+
+             int column = e.getX() / cellWidth;
+             int row = e.getY() / cellHeight;
+
+             selectedCell = new Point(column, row);
+             repaint();
+
+         }
+     };
+     addMouseListener(mouseHandler);
+     addMouseMotionListener(mouseHandler);
+     
 	
 		this.addMouseMotionListener(new MouseMotionAdapter()
 		{
@@ -121,13 +117,13 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			int column = e.getX()/cellWidth;
 			int row =e.getY()/cellHeight;
 			
-
-			
 			selectedCell2 = new Point(column,row);
 			repaint();
 		}
 		
 		});
+		
+//		addRampIcon(MapModeler.GetInstance().rampsTrigger);
 		
 	}
 	
@@ -135,38 +131,21 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	  public void invalidate() {
 //          cells.clear();
           selectedCell = null;
+          selectedCell2 = null;
           super.invalidate();
       }
 	  
 	
 
 	
-	
-@Override
-	public void paintComponent(Graphics g) 
-	{
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g.create();
 
-//		g2.setColor(Color.WHITE);
-//		g2.drawRect(0, 0, this.getWidth(), this.getHeight());
-//		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-//
-//		g2.setColor(Color.GRAY);
-//
-//		// Draw vertical grid lines
-//		for (int i = 0; i < levelWidth; ++i) 
-//		{
-//			int column = i * tileX;
-//			g2.drawLine(column, 0, column, levelHeight * tileY);
-//		}
-//
-//		// Draw horizontal grid lines
-//		for (int j = 0; j < levelHeight; ++j) 
-//		{
-//			int row = j * tileY;
-//			g2.drawLine(0, row, levelWidth * tileX, row);
-//		}
+	  @Override
+	  public void paintComponent(Graphics g) 
+	  {
+		  super.paintComponent(g);
+		  Graphics2D g2 = (Graphics2D) g.create();
+		
+
 		
 		//used new code to generate map 
 		int width = getWidth();
@@ -192,16 +171,64 @@ public class LevelPanel extends JPanel implements MouseMotionListener
             }
         }
 
-		if (selectedCell != null)
+		if (selectedCell != null && selectedCell2 != null)
 		{
 		
 			int widthT=(selectedCell2.x-selectedCell.x)*cellWidth;
 			int heightT=(selectedCell2.y-selectedCell.y)*cellHeight;
 			
-			g2.setColor(Color.RED);
+			g2.setColor(Color.RED);		
 			g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,widthT,heightT);
 			
 		}
+		
+		if (selectedCell !=null)
+		{
+            g2.setColor(Color.RED);
+            g2.fillRect(selectedCell.x*cellWidth+xOffset,selectedCell.y*cellHeight+yOffset,cellWidth,cellHeight);
+
+		}
+		
+		boolean ghostRampTilesAreNotWater = true;//calculate this each time you change ghostRampTiles
+		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && selectedCell!=null && selectedCell2!=null)
+		{
+			g2.setColor(Color.BLACK);
+			
+			
+			boolean horizontal = selectedCell.y == selectedCell2.y; 
+			boolean vertical = selectedCell.x==selectedCell2.x;
+			double topleftx;
+			double toplefty;
+			double bottomrightx;
+			double bottomrighty;
+			
+//			System.out.println(horizontal);
+			
+			if (horizontal)
+			{
+
+			 topleftx = (selectedCell.x+0.5)*cellWidth + xOffset;
+			 toplefty = (selectedCell.y+0.25)*cellHeight +yOffset;
+	
+			int TLX = (int) topleftx;
+				int TLY = (int) toplefty;				
+					g2.fillRect(TLX,TLY,cellWidth,cellHeight/2);
+			}
+          	
+		 if (vertical)
+				{
+			 topleftx = (selectedCell.x+0.25)*cellWidth + xOffset;
+			 toplefty = (selectedCell.y+0.5)*cellHeight +yOffset;
+	
+			int TLX = (int) topleftx;
+				int TLY = (int) toplefty;
+					g2.fillRect(TLX,TLY,cellWidth/2,cellHeight);
+				}
+			
+
+			
+		}
+		
 		
 		 g2.setColor(Color.GRAY);
          for (Rectangle cell : cells) {
@@ -210,25 +237,31 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 
          g2.dispose();
 
+         
 		
 	}
 	
-	
 
-		
-public  void addRampIcon() 
-{
-	
-//RX  add ramp icon to mouse tip
-	ramplabel=new JLabel(labelicon);
-	ramplabel.setBounds(15,225,labelicon.getIconWidth(),labelicon.getIconHeight());
 
-	    this.add(ramplabel);
-	    this.addMouseMotionListener(this);
-
-	    
-//	 System.out.println("abcdedf..."); //for test puropse only
-}
+//public  void addRampIcon(boolean iconpressed) 
+//{
+//
+//	//RX  add ramp icon to mouse tip
+//	ramplabel=new JLabel(labelicon);
+//	ramplabel.setBounds(15,225,labelicon.getIconWidth(),labelicon.getIconHeight());
+//
+//	if (iconpressed)
+//	{
+//	    this.add(ramplabel);
+//	    this.addMouseMotionListener(this);
+//	    revalidate();
+//	    repaint();
+//	   
+//	}
+//	    
+//	    
+////	 System.out.println("abcdedf..."); //for test puropse only
+//}
 
 	
 	

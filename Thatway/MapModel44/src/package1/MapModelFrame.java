@@ -144,12 +144,17 @@ public class MapModelFrame extends JFrame
 							leftPanel.setSelectedIndex(index);//focus on the new level
 						}
 					}
+					
+				
+					
 
 				});
 				OptionsPanel rightPanel = new OptionsPanel();
 		
 		
 		leftPanel.setBounds(0, 0, Constants.LEVEL_PANE_WIDTH, Constants.LEVEL_PANE_HEIGHT);
+		
+		
 		
 		GroupLayout layout = new GroupLayout(this.getContentPane());
 		this.getContentPane().setLayout(layout);
@@ -165,8 +170,7 @@ public class MapModelFrame extends JFrame
 		);
 	}
 
-	
-	
+		
 	
 	
 	public static void main(String[] args)  
