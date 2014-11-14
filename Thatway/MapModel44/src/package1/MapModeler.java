@@ -46,7 +46,7 @@ public class MapModeler
 	    map.addLevel(level0);
 	    //fill level0 with tiles
 	    for(int i=0;i<length;i++){
-	    	for(int j=0;j<length;j++){
+	    	for(int j=0;j<height;j++){
 	    		Tile temp = new Tile(i,j,null,new Height(0,0,0,0),level0); //height use (aHeight,R,G,B)
 	    		level0.addTile(temp);
 	    	}

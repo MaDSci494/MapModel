@@ -245,6 +245,15 @@ public class Level extends JComponent
   
   // Developper code
   
+  //Ran: get tile by (x,y) cord
+  public Tile getTileByXY(int x,int y){
+	  if(x>=0 && x<=map.getSizeX() && y<=map.getSizeY() && y>=0){
+		  return getTile(x*map.getSizeY()+y-1);
+	  }
+	  else return null;
+  }
+  
+  
   private void addListeners()
   {
 //	  	this.addMouseListener(new MouseAdapter()

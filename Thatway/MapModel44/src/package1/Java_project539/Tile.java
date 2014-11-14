@@ -676,6 +676,7 @@ public class Tile
 
   public String toString()
   {
+	  /*
 	  String outputString = "";
     return super.toString() + "["+
             "coorX" + ":" + getCoorX()+ "," +
@@ -687,5 +688,9 @@ public class Tile
             "  " + "height = "+(getHeight()!=null?Integer.toHexString(System.identityHashCode(getHeight())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "level = "+(getLevel()!=null?Integer.toHexString(System.identityHashCode(getLevel())):"null")
      + outputString;
+     */
+	  //for test
+	  String r = "coorX" + ":" + getCoorX()+ "," +"coorY" + ":" + getCoorY();
+	  return r;
   }
 }
