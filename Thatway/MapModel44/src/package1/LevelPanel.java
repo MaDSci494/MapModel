@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.ImageIcon;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 
 
 import package1.Java_project539.Level;
+import package1.Java_project539.Tile;
 
 
 import java.util.ArrayList; //RX
@@ -41,6 +43,10 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	private List<Rectangle> cells;
 	private Point selectedCell;
 	private Point selectedCell2;
+	
+	private Tile selectedBegin;
+	private Tile selectedEnd;
+	private ArrayList<Tile> selectedTile = new ArrayList<Tile>();
 
 
 	private ArrayList<RampDraw> rampdraw = new ArrayList<RampDraw>();
@@ -83,20 +89,71 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	        	  selectedCell2=null;
 	             Point point = e.getPoint();
 
+//<<<<<<< HEAD
 	             int width = getWidth();
 	             int height = getHeight();
 
 	             int cellWidth = width / levelWidth;
 	             int cellHeight = height / levelHeight;
-
+//=======
 	             int column = e.getX() / cellWidth;
 	             int row = e.getY() / cellHeight;
+	             
+             selectedCell = new Point(column, row);
+             //Ran: get selected cell and this will be the beginning one
+             selectedBegin = level.getTileByXY(column,row);
+             System.out.println("click star->"+"start:"+selectedBegin.toString());
+             //
+             repaint();
 
-	             selectedCell = new Point(column, row);
-	             repaint();
-
-	         }
-	     };
+         }
+         //Ran: generate selected tiles list
+         public void mouseReleased(MouseEvent e){
+        	//Ran:get selected cell and this will be end
+        	int width = getWidth();			
+ 			int height = getHeight();
+ 			int cellWidth = width/levelWidth;
+ 			int cellHeight = height/levelHeight;
+ 			int column = e.getX()/cellWidth;
+ 			int row =e.getY()/cellHeight;
+        	selectedEnd = level.getTileByXY(column,row);
+ 			System.out.println("click end->"+"start:"+selectedBegin.toString()+"end:"+selectedEnd.toString());
+ 			//add all tiles between those to selectedlist
+ 			//Ran: we can only select from upper left to lower right right now!
+ 			//that's our painting function
+ 			//this will be use if we can select from any direction
+ 			//right now only triggering selectedTiles if selceted from upper left to lower right
+ 			if(selectedEnd.getCoorX()>=selectedBegin.getCoorX()){
+ 				if(selectedEnd.getCoorY()>=selectedBegin.getCoorY()){
+ 					for(int i =selectedBegin.getCoorX();i<selectedEnd.getCoorX();i++){
+ 		 				for(int j=selectedBegin.getCoorY();j<selectedEnd.getCoorY();j++){
+ 		 					selectedTile.add(level.getTileByXY(i,j));
+ 		 				}
+ 		 			}
+ 				}else{
+ 					
+ 				}
+ 			}else{
+ 				if(selectedEnd.getCoorY()>=selectedBegin.getCoorY()){
+ 					
+ 				}else{
+ 					
+ 				}
+ 			}
+ 			
+ 			
+ 			//print out selectedTile just to check
+ 			System.out.print("selectedList->");
+ 			for(Tile t : selectedTile){
+ 				System.out.print(t.toString()+" ");
+ 			}
+ 			System.out.println("");
+         }
+     };
+     addMouseListener(mouseHandler);
+     addMouseMotionListener(mouseHandler);
+     
+	
 	     addMouseListener(mouseHandler);
 	     addMouseMotionListener(mouseHandler);
 	     
@@ -125,13 +182,27 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			});
 			
 			
+//<<<<<<< HEAD
 		}
 		
 
 	public void invalidate() {
 		selectedCell = null;
 		selectedCell2 = null;
-	}
+//=======
+//			selectedCell2 = new Point(column,row);
+			repaint();
+			
+		}
+		
+//		});
+		
+		
+		
+//		addRampIcon(MapModeler.GetInstance().rampsTrigger);
+		
+//>>>>>>> FETCH_HEAD
+//	}
 
 
 
