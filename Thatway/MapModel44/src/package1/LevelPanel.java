@@ -181,8 +181,10 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		             int row = (endPoint.y-yOffset)/cellHeight;
 					selectedCell2 = new Point(column,row);
 					*/
+	    			
 	    			int column = e.getX()/tileX;
 	    			int row = e.getY()/tileY;
+	    			
 	    			selectedEnd = level.getTileByXY(column,row);
 	    			//Ran:add all tiles between those to selectedlist 
 	    			selectedTile.clear();
@@ -401,7 +403,7 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			
 		
 		boolean ghostRampTilesAreNotWater = true;//calculate this each time you change ghostRampTiles
-		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && selectedCell!=null && selectedCell2!=null)
+		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && selectedStart!=null && selectedEnd!=null)
 		{
 
 
