@@ -8,17 +8,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.*;
+
+import package1.Java_project539.Tile;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -28,7 +21,7 @@ import java.io.File;
 public class OptionsPanel extends JPanel
 {
 	private JButton addRampButton = new JButton("Add Ramp");
-
+	private JTabbedPane leftpane;
 
 	///////////////////////////////////////////////////////////////
 	private JLabel originTileXLabel = new JLabel("Origin X: ");
@@ -53,28 +46,27 @@ public class OptionsPanel extends JPanel
 	private JButton makeIntoWaterButton = new JButton("Make selection into water");
 	private JButton addWaterButton = new JButton("Add water");
 	
-	//Ran: I put new level button with tabs
-	private JButton newLevelButton = new JButton("Add new level");
+
 	
 	String[] optionsPatterns = {"[type height between -100 and 100]" };
 	private JComboBox heightToGiveBox = new JComboBox(optionsPatterns); // TODO add to the panel
 	private JButton makeIntoThisHeightButton = new JButton("Give Selection this height: ");
 	
-	private JButton addMovableRockButton = new JButton("Add movable rock");
-	private JButton addDestructibleRockButton = new JButton("Add a destructible rock"); // in honor of Dustin Browder 
+	private JButton addMovableRockButton = new JButton("Make a movable rock");
+	private JButton addDestructibleRockButton = new JButton("Make a destructible rock"); // in honor of Dustin Browder 
 	
-	private JButton spawningPointButton = new JButton("Add a spawning point");
+	private JButton spawningPointButton = new JButton("Make a spawning point");
 	private JButton unaccessibleTerrainButton = new JButton("Make a tile unaccessible");
 	private JButton accessibleTerrainButton = new JButton("Make a tile accessible");
 	
 	public static JLabel ramplabel; //RX
 	public static ImageIcon labelicon = new ImageIcon("src/images/ramp.png","ramp"); //RX
 	
-	public OptionsPanel()
+	public OptionsPanel(JTabbedPane p)
 	{
 		super();
 		
-		
+		leftpane = p;
 		
 		originXField.setPreferredSize(new Dimension(50, 30));
 		originYField.setPreferredSize(new Dimension(50, 30));
@@ -107,8 +99,94 @@ public class OptionsPanel extends JPanel
 
 			
 		});
+		//Ran: make selection to water
+		makeIntoWaterButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				for(Tile t : l.selectedTile){
+					t.setObject(MapModeler.GetInstance().objects.get(5));
+				}
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
+		//Ran: add destructible rock
+		//the only difference is which img to load
+		//maybe we can create new mousadapter that takes care everything
+		addDestructibleRockButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==1){
+					l.selectedTile.get(0).setObject(MapModeler.GetInstance().objects.get(0));
+				}
+				//since we need to select only one otherwise just de-selecte all
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
+		addMovableRockButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==1){
+					l.selectedTile.get(0).setObject(MapModeler.GetInstance().objects.get(2));
+				}
+				//since we need to select only one otherwise just de-selecte all
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
+		spawningPointButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==1){
+					l.selectedTile.get(0).setObject(MapModeler.GetInstance().objects.get(3));
+				}
+				//since we need to select only one otherwise just de-selecte all
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
+		addWaterButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==1){
+					l.selectedTile.get(0).setObject(MapModeler.GetInstance().objects.get(5));
+				}
+				//since we need to select only one otherwise just de-selecte all
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
+		unaccessibleTerrainButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==1){
+					l.selectedTile.get(0).setObject(MapModeler.GetInstance().objects.get(1));
+				}
+				//since we need to select only one otherwise just de-selecte all
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
 		
-				
+		accessibleTerrainButton.addMouseListener(new MouseAdapter(){
+			public void mouseClicked(MouseEvent e){
+				LevelPanel l = (LevelPanel) leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==1){
+					//remeve unaccesible from tile
+					Tile t = l.selectedTile.get(0);
+					if(t.getObject()!=null){
+						if(t.getObject().getName().equals("Inaccessible")){
+							t.removeObject();
+						}
+					}
+				}
+				//since we need to select only one otherwise just de-selecte all
+				l.selectedTile.clear();
+				l.repaint();
+			}
+		});
+		
 	}
 	
 	

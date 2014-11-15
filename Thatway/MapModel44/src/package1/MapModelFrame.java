@@ -149,8 +149,9 @@ public class MapModelFrame extends JFrame
 					
 
 				});
-				OptionsPanel rightPanel = new OptionsPanel();
-		
+				//Ran: add optionpanel a reference to leftpanel
+				OptionsPanel rightPanel = new OptionsPanel(leftPanel);
+				
 		
 		leftPanel.setBounds(0, 0, Constants.LEVEL_PANE_WIDTH, Constants.LEVEL_PANE_HEIGHT);
 		

@@ -12,7 +12,9 @@ import javax.xml.stream.XMLStreamWriter;
 import package1.Java_project539.Height;
 import package1.Java_project539.Level;
 import package1.Java_project539.Map;
+import package1.Java_project539.Sprite;
 import package1.Java_project539.Tile;
+import package1.Java_project539.Object;
 
 //Singleton. The Map Modeler serves as a medium between the UI and the map. 
 public class MapModeler 
@@ -20,7 +22,7 @@ public class MapModeler
 	private static MapModeler modelerInstance = new MapModeler();
 	
 	private Map map;
-	
+	public ArrayList<Object> objects;
 	
 	public boolean rampsTrigger = false;
 	private ArrayList<Tile> currentSelection = new ArrayList<Tile>();
@@ -41,16 +43,19 @@ public class MapModeler
 	public void generateNewMap(int length, int height) 
 	{
 		map = new Map(length, height);
+		//Ran:inistailize object array
+		objects = new ArrayList<Object>();
+		objects.add(new Object("Destructible",new Sprite("Destructible.png")));
+		objects.add(new Object("Inaccessible",new Sprite("inaccessible.png")));
+		objects.add(new Object("Movable",new Sprite("movable.png")));
+		objects.add(new Object("Spawning",new Sprite("spawning.png")));
+		objects.add(new Object("Staircase",new Sprite("staircase.png")));
+		objects.add(new Object("Water",new Sprite("water.png")));
+		objects.add(new Object("Ramp",new Sprite("ramp.png")));//<- do we need this?
 		//Ran: new level 0 to map
 		Level level0 = new Level(0,0,map);
 	    map.addLevel(level0);
-	    //fill level0 with tiles
-	    for(int i=0;i<length;i++){
-	    	for(int j=0;j<height;j++){
-	    		Tile temp = new Tile(i,j,null,new Height(0,0,0,0),level0); //height use (aHeight,R,G,B)
-	    		level0.addTile(temp);
-	    	}
-	    }
+	    
 	}
 
 	public boolean hasMap() 
@@ -157,6 +162,7 @@ public class MapModeler
 		int levelnum = map.numberOfLevels();//since we are counting from level 0
 		Level templevel = new Level(levelnum,levelnum,map);
 	    map.addLevel(templevel);
+	    /*
 	    //fill leveltemp with tiles
 	    for(int i=0;i<map.getSizeX();i++){
 	    	for(int j=0;j<map.getSizeY();j++){
@@ -164,6 +170,6 @@ public class MapModeler
 	    		templevel.addTile(temp);
 	    	}
 	    }
-	   
+	   */
 	}
 }

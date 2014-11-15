@@ -63,6 +63,12 @@ public class Level extends JComponent
     {
       throw new RuntimeException("Unable to create level due to map");
     }
+    //Ran:fill tiles
+    for(int i=0;i<aMap.getSizeX();i++){
+    	for(int j=0;j<aMap.getSizeY();j++){
+    		addTile(new Tile(i,j,null,new Height(0,0,0,0),this));
+    	}
+    }
   }
 
   //------------------------

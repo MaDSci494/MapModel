@@ -3,6 +3,7 @@ package package1;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -48,7 +49,7 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	
 	private Tile selectedBegin;
 	private Tile selectedEnd;
-	private ArrayList<Tile> selectedTile = new ArrayList<Tile>();
+	public ArrayList<Tile> selectedTile = new ArrayList<Tile>();
 
 	private Point startPoint=null;
 	private Point endPoint=null;
@@ -135,15 +136,21 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	    			
 	    			selectedCell = new Point(column, row);
 
-	    			System.out.println("mousePressed:"+startPoint.x+" "+startPoint.y+" "+tileX+" "+tileY);
+	    			//System.out.println("mousePressed:"+startPoint.x+" "+startPoint.y+" "+tileX+" "+tileY);
+	    			
 	    			
 	    			//Ran: get selected cell and this will be the beginning one
-	    			selectedBegin = level.getTileByXY(column,row);
+	    			try{
+	    				selectedBegin = level.getTileByXY(column,row);
 	    			//clear up selectedTile if we have one
 	    			selectedTile.clear();
 	    			selectedTile.add(selectedBegin);
-	    			System.out.println("click star->"+"start:"+selectedBegin.toString());
-	    			//
+	    			//System.out.println("click star->"+"start:"+selectedBegin.toString());
+	    			
+	    			}catch(IndexOutOfBoundsException e2){
+	    				selectedTile.clear();
+	    			}
+	    			
 	    			repaint();
 
 	    		}
@@ -235,11 +242,11 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	    			*/
 	    			int column = e.getX()/tileX;
 	    			int row = e.getY()/tileY;
-	    			System.out.println("mouseReleased:"+startPoint.x+" "+startPoint.y+" "+tileX+" "+tileY);
+	    			//System.out.println("mouseReleased:"+startPoint.x+" "+startPoint.y+" "+tileX+" "+tileY);
 	    			selectedStart = new Point(column,row);
 	    			startPoint =null;
 	    			selectedEnd = level.getTileByXY(column,row);
-	    			System.out.println("click end->"+"start:"+selectedBegin.toString()+"end:"+selectedEnd.toString());
+	    			//System.out.println("click end->"+"start:"+selectedBegin.toString()+"end:"+selectedEnd.toString());
 	    			//Ran:add all tiles between those to selectedlist 
 	    			selectedTile.clear();
 	    			if(selectedEnd.getCoorX()>=selectedBegin.getCoorX()){
@@ -274,11 +281,11 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	    			repaint();
  			
 	    			//Ran:print out selectedTile just to check
-	    			System.out.print("selectedList->");
-	    			for(Tile t : selectedTile){
-	    				System.out.print(t.toString()+" ");
-	    			}
-	    			System.out.println("");
+	    			//System.out.print("selectedList->");
+	    			//for(Tile t : selectedTile){
+	    			//	System.out.print(t.toString()+" ");
+	    			//}
+	    			//System.out.println("");
          }
 
 		
@@ -384,7 +391,6 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			g2.drawLine(1,1+i*tileY,tileX*levelWidth,1+i*tileY);
 		}
 		
-		g2.dispose();
 		
 		// to draw ramp
 		for (RampDraw rp : rampdraw)
@@ -440,8 +446,17 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			}
 
 			
-
 		}
+		//Ran: draw sprite
+		for(Tile t : level.getTiles()){
+			if(t.getObject()!=null){
+				Image img = t.getObject().getSprite().getImg();
+				g2.drawImage(img,t.getCoorX()*tileX+tileX/2,t.getCoorY()*tileY+tileY/2,tileX/2,tileY/2,null);
+				//System.out.println(t.getObject().toString()+" "+t.getObject().getSprite());
+			}
+		}
+		
+		g2.dispose();
 	}
 	
 			public void addRectangle(RampDraw rectangle)
@@ -485,6 +500,8 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			// TODO draw height difference
 
 			// TODO insert images  JB
+			
+			
 
 			// System.out.println("Drawing loop");
 

@@ -4,7 +4,14 @@ package package1.Java_project539;
 /*This code was generated using the UMPLE 1.21.0.4678 modeling language!*/
 
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 
 // line 144 "model.ump"
 // line 309 "model.ump"
@@ -20,7 +27,9 @@ public class Sprite
 
   //Sprite Attributes
   private String name;
-
+  //Ran: buffered image to display
+  private BufferedImage img;
+ 
   //Sprite Associations
   private List<Object> objects;
   private List<Staircase> staircases;
@@ -30,9 +39,16 @@ public class Sprite
   // CONSTRUCTOR
   //------------------------
 
-  public Sprite(String aName)
+  public Sprite(String aName) 
   {
     name = aName;
+    try{
+    	img = ImageIO.read(new File("src/images/"+name));
+    }
+    catch(IOException e){
+    	//who cares
+    	System.out.println("Error reading img");
+    }
     objects = new ArrayList<Object>();
     staircases = new ArrayList<Staircase>();
     terraintypes = new ArrayList<Terraintype>();
@@ -42,6 +58,13 @@ public class Sprite
   // INTERFACE
   //------------------------
 
+  //Ran: getter for img
+  public BufferedImage getImg(){
+	  return img;
+  }
+  
+  
+  
   public boolean setName(String aName)
   {
     boolean wasSet = false;

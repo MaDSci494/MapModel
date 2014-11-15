@@ -49,6 +49,7 @@ public class Tile
     */
     paths = new ArrayList<Path>();
     neighour = new ArrayList<Tile>();
+    
     boolean didAddHeight = setHeight(aHeight);
     if (!didAddHeight)
     {
@@ -673,6 +674,16 @@ public class Tile
     placeholderLevel.removeTile(this);
   }
 
+  
+  //Ran: removeObject
+  public void removeObject(){
+	   Object existingObject = object;
+	   if (existingObject != null)
+	    {
+	      existingObject.removeTile(this);
+	    }
+	    object = null;
+  }
 
   public String toString()
   {
