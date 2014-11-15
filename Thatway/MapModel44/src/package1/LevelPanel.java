@@ -403,15 +403,19 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			
 		
 		boolean ghostRampTilesAreNotWater = true;//calculate this each time you change ghostRampTiles
-		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && selectedStart!=null && selectedEnd!=null)
+//<<<<<<< HEAD
+//		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && selectedStart!=null && selectedEnd!=null)
+//=======
+		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && (selectedTile.size()==2))
+//>>>>>>> FETCH_HEAD
 		{
 
 
 			g2.setColor(Color.BLACK);
 
-
-			boolean horizontal = (selectedCell.y == selectedCell2.y && (selectedCell2.x - selectedCell.x)==1 ); 
-			boolean vertical = (selectedCell.x==selectedCell2.x && (selectedCell2.y - selectedCell.y)==1);
+			
+			boolean horizontal = (selectedBegin.getCoorY() == selectedEnd.getCoorY() && Math.abs(selectedEnd.getCoorX() - selectedBegin.getCoorX())==1 ); 
+			boolean vertical = (selectedBegin.getCoorX()==selectedEnd.getCoorX() && Math.abs(selectedEnd.getCoorY() - selectedBegin.getCoorY())==1);
 			double topleftx;
 			double toplefty;
 			double bottomrightx;
@@ -420,14 +424,20 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 
 			if (horizontal)
 			{
+				//in order to select from differenct directions
+				if(selectedEnd.getCoorX()<selectedBegin.getCoorX()){
+					Tile temp = selectedEnd;
+					selectedEnd = selectedBegin;
+					selectedBegin = temp;
+				}
+				
+				topleftx = (selectedBegin.getCoorX()+0.5)*tileX;
+				toplefty = (selectedBegin.getCoorY()+0.25)*tileY;
 
-				topleftx = (selectedCell.x+0.5)*cellWidth + xOffset;
-				toplefty = (selectedCell.y+0.25)*cellHeight +yOffset;
-
-				int TLX = (int) topleftx;
-				int TLY = (int) toplefty;				
-				g2.fillRect(TLX,TLY,cellWidth,cellHeight/2);
-				Rectangle r=new Rectangle(TLX,TLY,cellWidth,cellHeight/2);
+				int TLX = selectedBegin.getCoorX()*tileX+tileX/2;
+				int TLY = selectedBegin.getCoorY()*tileY+tileY/4;			
+				g2.fillRect(TLX,TLY,tileX,tileY/2);
+				Rectangle r=new Rectangle(TLX,TLY,tileX,tileY/2);
 				RampDraw rp = new RampDraw(r);
 				addRectangle(rp);
 
@@ -435,13 +445,20 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 
 			if (vertical)
 			{
-				topleftx = (selectedCell.x+0.25)*cellWidth + xOffset;
-				toplefty = (selectedCell.y+0.5)*cellHeight +yOffset;
+				//in order to select from differenct directions
+				if(selectedEnd.getCoorY()<selectedBegin.getCoorY()){
+					Tile temp = selectedEnd;
+					selectedEnd = selectedBegin;
+					selectedBegin = temp;
+				}
+				
+				topleftx = (selectedBegin.getCoorX()+0.25)*tileX;
+				toplefty = (selectedBegin.getCoorY()+0.5)*tileY;
 
-				int TLX = (int) topleftx;
-				int TLY = (int) toplefty;
-				g2.fillRect(TLX,TLY,cellWidth/2,cellHeight);
-				Rectangle r=new Rectangle(TLX,TLY,cellWidth/2,cellHeight);
+				int TLX = selectedBegin.getCoorX()*tileX+tileX/4;
+				int TLY = selectedBegin.getCoorY()*tileY+tileY/2;
+				g2.fillRect(TLX,TLY,tileX/2,tileY);
+				Rectangle r=new Rectangle(TLX,TLY,tileX/2,tileY);
 				RampDraw rp = new RampDraw(r);
 				addRectangle(rp);
 

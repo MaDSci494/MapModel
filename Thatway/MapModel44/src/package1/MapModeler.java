@@ -45,6 +45,7 @@ public class MapModeler
 		map = new Map(length, height);
 		//Ran:inistailize object array
 		objects = new ArrayList<Object>();
+		//do not change order
 		objects.add(new Object("Destructible",new Sprite("Destructible.png")));
 		objects.add(new Object("Inaccessible",new Sprite("inaccessible.png")));
 		objects.add(new Object("Movable",new Sprite("movable.png")));
