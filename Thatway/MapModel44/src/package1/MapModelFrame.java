@@ -27,7 +27,10 @@ public class MapModelFrame extends JFrame
 	
 	private static MapModelFrame mainFrame;
 	private JLayeredPane layeredPane;
-
+	
+	private OptionsPanel rightPanel;
+	private JTabbedPane leftPanel;
+	private MapModeler model;
 	
 	JTextField lengthField;
 	JTextField heightField;
@@ -102,17 +105,19 @@ public class MapModelFrame extends JFrame
 	// If the MapModeler has no map, this will do nothing.
 	public void fillWithMapModeler()   //RX change from private to public
 	{
-		final MapModeler model = MapModeler.GetInstance();
+		model = MapModeler.GetInstance();
 	    
 		if (!model.hasMap())
 			return;
 		
 		this.getContentPane().remove(0);
+		//remove old leftPanel if any
+		if(leftPanel!=null) this.remove(leftPanel);
 		
 		// TODO Ran could add a leftmost panel for Level tabs?
 		//TODO Ran add a leftmost panel for Level tabs
 				//LevelPanel leftPanel = new LevelPanel(model.getMapWidth(), model.getMapHeight());
-				final JTabbedPane leftPanel = new JTabbedPane(JTabbedPane.LEFT,JTabbedPane.WRAP_TAB_LAYOUT);
+				leftPanel = new JTabbedPane(JTabbedPane.LEFT,JTabbedPane.WRAP_TAB_LAYOUT);
 				final Map map = model.getMap();
 				
 				//the levels of current map
@@ -130,7 +135,7 @@ public class MapModelFrame extends JFrame
 						int index = leftPanel.getSelectedIndex();
 						if(index == leftPanel.indexOfTab("+")){
 							int levelnum = leftPanel.getTabCount()-1;
-							map.addLevel(new Level(levelnum,levelnum,map));
+							//map.addLevel(new Level(levelnum,levelnum,map));
 							LevelPanel levelPane = new LevelPanel(model.getMapWidth(), model.getMapHeight(),levelnum);
 							//Ran:	when you add a level, it will trigger the stateChange again
 							//		will get into infinite loop and stackoverflow if you do nothing
@@ -150,7 +155,9 @@ public class MapModelFrame extends JFrame
 
 				});
 				//Ran: add optionpanel a reference to leftpanel
-				OptionsPanel rightPanel = new OptionsPanel(leftPanel);
+				//remove old rightPanel from Frame
+				if(rightPanel!=null)this.remove(rightPanel);
+				rightPanel = new OptionsPanel(leftPanel);
 				
 		
 		leftPanel.setBounds(0, 0, Constants.LEVEL_PANE_WIDTH, Constants.LEVEL_PANE_HEIGHT);

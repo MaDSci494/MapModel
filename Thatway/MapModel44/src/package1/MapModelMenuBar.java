@@ -63,32 +63,35 @@ public class MapModelMenuBar extends JMenuBar // TODO maybe: implements EventLis
 			@Override
 			public void actionPerformed(ActionEvent e){
 				//if we currently have a map then ask user to be sure that current work is going to be overwritten
+				int result = JOptionPane.YES_OPTION;
 				if(MapModeler.GetInstance().hasMap()){
-					int result = JOptionPane.showConfirmDialog(null,
+					 result = JOptionPane.showConfirmDialog(null,
 															"Any unsaved change will be discarded.",
 															"Warning",
 															JOptionPane.YES_NO_OPTION,
 															JOptionPane.WARNING_MESSAGE);
-					switch(result){
-						case JOptionPane.YES_OPTION:
-							int returnVal = chooser.showOpenDialog(getParent());
-							if(returnVal == JFileChooser.APPROVE_OPTION){
-								String path = chooser.getSelectedFile().getAbsolutePath();
-								System.out.println("You chose to open this file: "+ path);	
-								//load up map
-								MapModeler.GetInstance().loadMap(path);
-							}else{
-								if(returnVal == JFileChooser.CANCEL_OPTION){
-									System.out.println("You canceled");
-								}
-								else{
-									JOptionPane.showMessageDialog(null,"Error loading file.");
-								}
-							}
-							break;
-						default: return;
-					}
 				}
+				switch(result){
+					case JOptionPane.YES_OPTION:
+						int returnVal = chooser.showOpenDialog(getParent());
+						if(returnVal == JFileChooser.APPROVE_OPTION){
+							String path = chooser.getSelectedFile().getAbsolutePath();
+							System.out.println("You chose to open this file: "+ path);	
+							//load up map
+							MapModeler.GetInstance().loadMap(path);
+							
+						}else{
+							if(returnVal == JFileChooser.CANCEL_OPTION){
+								System.out.println("You canceled");
+							}
+							else{
+								JOptionPane.showMessageDialog(null,"Error loading file.");
+							}
+						}
+						break;
+					default: return;
+				}
+				
 			}
 		});
 		save.addActionListener(new ActionListener(){

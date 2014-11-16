@@ -85,6 +85,10 @@ public class OptionsPanel extends JPanel
 		unitSizeField.setMaximumSize(new Dimension(50, 30));
 
 	}
+	//Ran:allow modeler to update the tabbedpane after laod
+	public void setLeftPane(JTabbedPane t){
+		leftpane = t;
+	}
 	
 	public void addListeners() 
 	{
