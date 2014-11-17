@@ -4,16 +4,9 @@ package package1.Java_project539;
 /*This code was generated using the UMPLE 1.21.0.4678 modeling language!*/
 
 
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.*;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-
-import package1.MapModeler;
 
 // line 66 "model.ump"
 // line 239 "model.ump"
@@ -63,12 +56,39 @@ public class Level extends JComponent
     {
       throw new RuntimeException("Unable to create level due to map");
     }
+    
+    //Developper code
     //Ran:fill tiles
-    for(int i=0;i<aMap.getSizeX();i++){
-    	for(int j=0;j<aMap.getSizeY();j++){
+    for(int i=0;i<aMap.getSizeX();i++)
+    {
+    	for(int j=0;j<aMap.getSizeY();j++)
+    	{
     		addTile(new Tile(i,j,null,new Height(0,0,0,0),this));
     	}
     }
+    
+    // Give them their neighbors
+    for(int i=0;i<aMap.getSizeX();i++)
+    {
+    	for(int j=0;j<aMap.getSizeY();j++)
+    	{
+    		ArrayList<Tile> list = new ArrayList<Tile>();
+    		list.add(getTileByXY(i, j - 1));
+    		list.add(getTileByXY(i, j+1));
+    		list.add(getTileByXY(i+1, j));
+    		list.add(getTileByXY(i - 1, j));
+    		
+    		for (Tile t : list)
+    		{
+    			if (t != null)
+    			{
+    				getTileByXY(i, j).addNeighour(t);
+    			}
+    		}
+    	}
+    }
+    
+    
   }
 
   //------------------------
@@ -90,8 +110,11 @@ public class Level extends JComponent
 
   public Tile getTile(int index)
   {
-    Tile aTile = tiles.get(index);
-    return aTile;
+	  if(tiles.size() <= index)
+		  return null;
+	  
+      Tile aTile = tiles.get(index);
+      return aTile;
   }
 
   public List<Tile> getTiles()
@@ -252,86 +275,14 @@ public class Level extends JComponent
   // Developper code
   
   //Ran: get tile by (x,y) cord
-  public Tile getTileByXY(int x,int y){
-	  if(x>=0 && x<=map.getSizeX() && y<=map.getSizeY() && y>=0){
-		  return getTile(x*map.getSizeY()+y);
-	  }
-	  else return null;
-  }
-  
-  
-  private void addListeners()
+  public Tile getTileByXY(int x,int y)
   {
-//	  	this.addMouseListener(new MouseAdapter()
-//		{
-//			public void mousePressed(MouseEvent e)
-//			{
-//				// TODO   
-//				
-//			}
-//		});
-	  	
-	  	this.addMouseMotionListener(new MouseAdapter()
-		{
-	  		public void mouseEntered(MouseEvent e)
-	  		{
-	  			System.out.println("Mouse entered over map");
-	  			// highlightTile(e.getLocationOnScreen());
-	  			
-	  			// TODO Rubing: display ramps where they would appear if clicked right now 
-	  		}
-	  		
-	  		public void mouseExited(MouseEvent e)
-	  		{
-	  			// TODO Rubing: when we exit the map with the mouse, last ramp or water should disappear
-	  		}
-	  		
-	  		public void mouseMoved(MouseEvent e)
-	  		{
-	  			// TODO Rubing: using the MouseEvent, you should calculate if anything can be placed down. 
-	  			// For this, I suggest using triggers in MapModeler.GetInstance() (ex: 
-	  		}
-	  		
-			public void mousePressed(MouseEvent e)
-			{
-				// TODO Rubing 
-				// add ramp, water tile, rock tile, etc.
-				
-				// IF nothing was to add, then implement tile selection. 
-				// I suggest using MapModeler.getInstance().getCurrentSelection().addTiles([current tiles]);
-				// although this should only be called on MouseReleased, while mousePressed should initialize [current tiles] to one tile
-				
-				
-				MapModeler.GetInstance().clearAllTriggers();
-			}
-		});
-	  	
+	  if(x>=0 && x<map.getSizeX() && y<map.getSizeY() && y>=0)
+		  return getTile(x*map.getSizeY()+y);
+	  else 
+		  return null;
   }
 }
-  
-  
-			
-			// RX gridRollOver
-			//public void highlightTile(Point cursor)
-			
-		//	for (int i=0; i<button.tile;i++) 
-			//{JButton tile = buttonsp[i];
-			//Point tileLocation = tile.getLocationOnScreen();
-	        //double west =tileLocation.getX();
-	        //double east = tileLocation.getX()+tile.getWidth();
-	        //double south = tileLocation.getY();
-	        //double north = tileLocation.getY()+tile.getHeight();
-	        //boolean inRow = tile.getX()>west && tile.getX()<east;
-	        //boolean inCol=tile.getY()>south && tile.getY()<north;
-            //tile.setBackground(inBounds ? new Color(0xFFFF00) : null);
-		//	}
-			
-			
-				
-				
-	//		}
-			
-	//	});
 	  	
 	  	
 	  

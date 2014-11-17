@@ -6,6 +6,8 @@ package package1.Java_project539;
 
 import java.util.*;
 
+import package1.MapModeler;
+
 // line 73 "model.ump"
 // line 246 "model.ump"
 public class Object
@@ -200,5 +202,16 @@ public class Object
             "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "sprite = "+(getSprite()!=null?Integer.toHexString(System.identityHashCode(getSprite())):"null")
      + outputString;
+  }
+  
+  
+  // Developper code
+  
+  public boolean isWalkable()
+  {
+	  return this != MapModeler.GetInstance().objects.get(0) &&
+			  this != MapModeler.GetInstance().objects.get(1) && 
+			  this != MapModeler.GetInstance().objects.get(2) && 
+			  this != MapModeler.GetInstance().objects.get(5);
   }
 }

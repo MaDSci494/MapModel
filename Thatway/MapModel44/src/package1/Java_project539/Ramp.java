@@ -50,7 +50,8 @@ public class Ramp
     tiles = new ArrayList<Tile>();
   }
   
-  //Ran:another constructor
+  //DEVELOPPER CODE:
+//Ran:another constructor
   public Ramp(Tile t1,Tile t2, Map aMap){
 	  tiles = new ArrayList<Tile>();
 	  addTile(t1);
@@ -58,6 +59,7 @@ public class Ramp
 	  map = aMap;
 	  rectangle = new MyRectangle(this);
   }
+// / DEVELOPPER CODE
 
   //------------------------
   // INTERFACE

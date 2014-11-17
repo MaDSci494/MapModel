@@ -10,6 +10,14 @@ import java.util.*;
 // line 199 "model.ump"
 public class Tile
 {
+	
+	// developper variables for AStar
+	private int distance = 0;
+	private boolean isDestination = false;
+	private int fValue;
+	private int hValue;
+	private Tile previous;
+	// /developper variables
 
   //------------------------
   // MEMBER VARIABLES
@@ -704,4 +712,129 @@ public class Tile
 	  String r = "coorX" + ":" + getCoorX()+ "," +"coorY" + ":" + getCoorY();
 	  return r;
   }
+  
+  
+  //Developper code
+  public void setDistance(int distance)
+  {
+	  this.distance = distance;
+  }
+  
+  public int getDistance()
+  {
+	  return distance;
+  }
+  
+  public boolean isDestination()
+  {
+	  return isDestination;
+  }
+  
+  public void setIsDestination(boolean dest)
+  {
+	  isDestination = dest;
+  }
+  
+  public Tile getPrevious() 
+  {
+	return previous;
+  }
+  
+  public void setPrevious(Tile previous) 
+  {
+	this.previous = previous;
+  }
+  
+  public void calculateFValue() 
+  {
+	  this.fValue = getGValue() + getHValue();
+  }
+
+  public void calculateHValue(int destinationX, int destinationY, int destLevel) 
+  {
+	hValue = Math.abs(coorX - destinationX) + Math.abs(coorY-destinationY);
+	hValue += (level.getMap().getSizeX() +  level.getMap().getSizeY()) / 2 * Math.abs(destLevel - level.getLevelnum());// TODO tweak heuristic
+  }
+  
+  public int getFValue() 
+  {
+	return fValue;
+  }
+
+	private int getHValue() 
+	{
+		return hValue;
+	}
+
+	public int getGValue() 
+	{
+		return distance; // equivalent to getDistance()
+	}
+	
+	public List<Tile> getNeighbours()
+	{
+		List<Tile> neighbours = new ArrayList<Tile>();
+		if (hasStaircase())
+		{
+			neighbours.add(getStaircase().getDestinationTileFrom(this));
+		}
+		
+		refreshNeighbour();
+		
+		neighbours.addAll(getNeighour());
+		return neighbours;
+	}
+	
+	public void refreshNeighbour()
+	{
+		ArrayList<Tile> list = new ArrayList<Tile>();
+		list.add(getLevel().getTileByXY(coorX, coorY - 1));
+		list.add(getLevel().getTileByXY(coorX, coorY+1));
+		list.add(getLevel().getTileByXY(coorX+1, coorY));
+		list.add(getLevel().getTileByXY(coorX - 1, coorY));
+		
+		neighour.clear();
+		for (Tile t : list)
+		{
+			if (t != null)
+			{
+				boolean canGoFromHereToThere = false;
+				if (this.height.getHeightnum() == t.getHeight().getHeightnum())
+				{
+					canGoFromHereToThere = true;
+				}
+				else
+				{
+					for (Ramp r : getRamps())
+					{
+						Tile t1 = r.getTile(0);
+						Tile t2 = r.getTile(1);
+						if ((t1 == this && t2 == t) || (t1 == t && t2 == this))
+						{
+							canGoFromHereToThere = true;
+							break;
+						}
+					}
+				}
+				
+				if (canGoFromHereToThere)
+				{
+					Object o1 = this.getObject();
+					Object o2 = t.getObject();
+					if (o1 != null && !o1.isWalkable())
+						canGoFromHereToThere = false;
+					
+					if (o2 != null && !o2.isWalkable())
+						canGoFromHereToThere = false;
+				}
+				
+				if (canGoFromHereToThere)
+					addNeighour(t);
+			}
+		}
+		
+	}
+  
+  
+  
 }

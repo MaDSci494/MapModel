@@ -192,4 +192,22 @@ public class Height
             "  " + "color = "+(getColor()!=null?Integer.toHexString(System.identityHashCode(getColor())):"null")
      + outputString;
   }
+  
+  //Developper code
+  
+  private static ArrayList<Height> heights = new ArrayList<Height>();
+  
+  public static Height generateHeight(int height)
+  {
+	  for (Height h : heights)
+	  {
+		  if (h.getHeightnum() == height)
+			  return h;
+	  }
+	  int positiveHeight = height + 100;
+	  Color c = new Color(positiveHeight, 200-positiveHeight, 150+positiveHeight/2, height);
+	  heights.add(c.getHeight());
+	  return c.getHeight();
+  }
+  
 }

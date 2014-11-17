@@ -2,7 +2,6 @@ package package1;
 
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import package1.Java_project539.Level;
 import package1.Java_project539.Map;
 import package1.Java_project539.Ramp;
 import package1.Java_project539.Sprite;
+import package1.Java_project539.Staircase;
 import package1.Java_project539.Tile;
 import package1.Java_project539.Object;
 
@@ -30,15 +30,12 @@ public class MapModeler
 	private Map map;
 	public ArrayList<Object> objects;
 	
-	
-	public boolean rampsTrigger = false;
 	private ArrayList<Tile> currentSelection = new ArrayList<Tile>();
-	
-	
-	
 	// private constructor, since MapModeler should always have only one instance.
 	private MapModeler() 
 	{
+		// TODO could have used enums
+		
 		//Ran:inistailize object array
 		objects = new ArrayList<Object>();
 		//do not change order
@@ -63,7 +60,6 @@ public class MapModeler
 		//Ran: new level 0 to map
 		Level level0 = new Level(0,0,map);
 	    map.addLevel(level0);
-	    
 	}
 
 	public boolean hasMap() 
@@ -80,34 +76,14 @@ public class MapModeler
 	{
 		return map.getSizeY();
 	}
-
-	public void switchToRampsMode() 
-	{
-		int currentLevel = 0; // TODO get the real current level
-		rampsTrigger = true;
-		
-	}
-	
-	private Level getCurrentLevel()
-	{
-		int currentLevel = 0; // TODO get the real current level
-		
-		return null;
-	}
 	
 	public List<Tile> getCurrentSelection()
 	{
 		return currentSelection;
 	}
 
-	public void clearAllTriggers() 
-	{
-		rampsTrigger = false;
-		// TODO remove others
-		
-	}
 	//Ran's helper functions
-	//TODO Ran: load & save function, map.java should only contain data and let modeler deal with saving
+	//Ran: load & save function, map.java should only contain data and let modeler deal with saving
 	public void saveMap(String path)
 	{
 		XMLOutputFactory xof = XMLOutputFactory.newInstance();
@@ -155,7 +131,7 @@ public class MapModeler
 					//Ran: then I need to save tile's other attributes but I need progress from Rubing
 					//save tile height & object if any
 					writer.writeStartElement("height");
-					writer.writeCharacters("0");
+					writer.writeCharacters(String.valueOf(t.getHeight().getHeightnum()));
 					writer.writeEndElement();
 					
 					writer.writeStartElement("object");
@@ -172,6 +148,7 @@ public class MapModeler
 				//end level
 				writer.writeEndElement();
 			}
+			
 			//start to save the ramp list
 			writer.writeStartElement("Ramps");
 			for(Ramp r : map.getRamps()){
@@ -202,6 +179,31 @@ public class MapModeler
 			
 			//end ramp list
 			writer.writeEndElement();
+			
+			//start staircase list
+			writer.writeStartElement("Staircases");
+			for(Level l : MapModeler.GetInstance().getMap().getLevels()){
+				for(Tile t : l.getTiles()){
+					if(t.hasStaircase()){
+						Tile t1 = t.getStaircase().getTile(0);
+						Tile t2 = t.getStaircase().getTile(1);
+						//avoid confilcts
+						if(t1.getCoorX()==t.getCoorX()&&t1.getCoorY()==t.getCoorY()&&t1.getLevel().getLevelnum()==t.getLevel().getLevelnum()){
+							String temp = "("+t1.getCoorX()+","+t1.getCoorY()+","+t1.getLevel().getLevelnum()+")"+":"
+								+"("+t2.getCoorX()+","+t2.getCoorY()+","+t2.getLevel().getLevelnum()+")";
+							//(x,y,l)
+							System.out.println(temp);
+							writer.writeStartElement("Staircase");
+							writer.writeCharacters(temp);
+							writer.writeEndElement();
+						}
+						
+					}	
+				}
+			}
+			//end staircase list
+			writer.writeEndElement();
+			
 			//end map
 			writer.writeEndElement();
 			//end mapmodel44
@@ -285,7 +287,9 @@ public class MapModeler
 							int y = Integer.parseInt(reader.getText());
 							reader.next();reader.next();reader.next();
 							int h = Integer.parseInt(reader.getText());
-							Height height = new Height(h,0,0,0);//Ran: how we going to new a height?
+							Height height;
+							if(h==0) height = new Height(h,0,0,0);//Ran: how we going to new a height?
+							else height = Height.generateHeight(h);
 							reader.next();reader.next();reader.next();
 							String o = reader.getText();
 							reader.next();reader.next();
@@ -313,8 +317,11 @@ public class MapModeler
 								default://default we don't set anything
 							}
 							//System.out.println("Change tile " + x + "," + y + " with height:" + h + " object:"+o);
-						}else{
-							if(reader.getLocalName().equals("Ramps")&&event==XMLStreamConstants.START_ELEMENT){
+						}
+						else
+						{
+							if(reader.getLocalName().equals("Ramps")&&event==XMLStreamConstants.START_ELEMENT)
+							{
 								reader.next();
 								while(reader.getLocalName().equals("Ramp")&&event==XMLStreamConstants.START_ELEMENT){
 									reader.next();reader.next();
@@ -333,8 +340,35 @@ public class MapModeler
 									Tile t2 = loadMap.getLevel(levelnum).getTileByXY(t2x,t2y);
 									loadMap.addRamp(new Ramp(t1,t2,loadMap));
 								}
+							}else{
+								if(reader.getLocalName().equals("Staircases")&&event==XMLStreamConstants.START_ELEMENT){
+									reader.next();
+									while(reader.getLocalName().equals("Staircase")&&event==XMLStreamConstants.START_ELEMENT){
+										reader.next();
+										String s = reader.getText();
+										String[] ss = s.split(":");
+										String ori = ss[0];
+										String des = ss[1];
+										String origin = ori.substring(1,ori.length()-1);
+										String destination = des.substring(1,des.length()-1);
+										String[] originP = origin.split(",");
+										String[] destinationP = destination.split(",");
+										int oriX = Integer.parseInt(originP[0]);
+										int oriY = Integer.parseInt(originP[1]);
+										int oriL = Integer.parseInt(originP[2]);
+										int desX = Integer.parseInt(destinationP[0]);
+										int desY = Integer.parseInt(destinationP[1]);
+										int desL = Integer.parseInt(destinationP[2]);
+										Tile t1 = loadMap.getLevel(oriL).getTileByXY(oriX,oriY);
+										Tile t2 = loadMap.getLevel(desL).getTileByXY(desX,desY);
+										Tile[] t = {t1,t2};
+										Staircase stairs = new Staircase(objects_t.get(4).getSprite(), t);
+										reader.next();reader.next();
+									}
+									reader.next();
+								}
 							}
-						}
+						}// end else
 					}
 				}
 						
@@ -364,14 +398,5 @@ public class MapModeler
 		int levelnum = map.numberOfLevels();//since we are counting from level 0
 		Level templevel = new Level(levelnum,levelnum,map);
 	    map.addLevel(templevel);
-	    /*
-	    //fill leveltemp with tiles
-	    for(int i=0;i<map.getSizeX();i++){
-	    	for(int j=0;j<map.getSizeY();j++){
-	    		Tile temp = new Tile(i,j,null,new Height(0,0,0,0),templevel); //height use (aHeight,R,G,B)
-	    		templevel.addTile(temp);
-	    	}
-	    }
-	   */
 	}
 }

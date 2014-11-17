@@ -174,5 +174,21 @@ public class Staircase
     }
     tiles.clear();
   }
+  
+  // Developper code
+  public Tile getDestinationTileFrom(Tile origin)
+  {
+	  if (tiles.get(0) == origin)
+		  return tiles.get(1);
+	  else if (tiles.get(1) == origin)
+		  return tiles.get(0);
+	  else
+	  {
+		  int a = 4;
+		  int b = 0;
+		  int c = a / b;//crash
+		  return null;
+	  }
+  }
 
 }
