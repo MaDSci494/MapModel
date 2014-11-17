@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
 import package1.Java_project539.Level;
+import package1.Java_project539.Ramp;
 import package1.Java_project539.Tile;
 
 import java.util.ArrayList; //RX
@@ -55,8 +56,9 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 	private Point endPoint=null;
 	
 
-	private ArrayList<RampDraw> rampdraw = new ArrayList<RampDraw>();
-
+	//private ArrayList<RampDraw> rampdraw = new ArrayList<RampDraw>();
+	//private ArrayList<Rectangle> rampdraw = new ArrayList<Rectangle>();
+	
 	public LevelPanel(int width, int height, int levelNum) 
 	{
 		super();
@@ -393,15 +395,15 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			g2.drawLine(1,1+i*tileY,tileX*levelWidth,1+i*tileY);
 		}
 		
-		
+		/*
 		// to draw ramp
 		for (RampDraw rp : rampdraw)
 		{
 			Rectangle r=rp.getRectangle();
 			g.fillRect(r.x,r.y,r.width,r.height);
 		}
-			
-		
+		/*
+		/*
 		boolean ghostRampTilesAreNotWater = true;//calculate this each time you change ghostRampTiles
 //<<<<<<< HEAD
 //		if(MapModeler.GetInstance().rampsTrigger && ghostRampTilesAreNotWater && selectedStart!=null && selectedEnd!=null)
@@ -465,7 +467,18 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 			}
 
 			
+		}*/
+		//Ran: draw ramps
+		g2.setColor(Color.BLACK);
+		List<Ramp> ramps = MapModeler.GetInstance().getMap().getRamps();
+		for(Ramp r : ramps){
+			if(r.getTile(0).getLevel()==level){
+				Rectangle rec = r.getRectangle().generateRec(tileX,tileY);
+				//rampdraw.add(rec);
+				g2.fill(rec);
+			}
 		}
+		
 		//Ran: draw sprite
 		for(Tile t : level.getTiles()){
 			if(t.getObject()!=null){
@@ -477,7 +490,7 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 		
 		g2.dispose();
 	}
-	
+			/*
 			public void addRectangle(RampDraw rectangle)
 			{
 				rampdraw.add(rectangle);
@@ -500,7 +513,7 @@ public class LevelPanel extends JPanel implements MouseMotionListener
 					return rectangle;
 				}
 			}
-
+			*/
 
 
 

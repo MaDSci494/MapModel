@@ -1,5 +1,6 @@
 package package1;
 
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import javax.xml.stream.XMLStreamWriter;
 import package1.Java_project539.Height;
 import package1.Java_project539.Level;
 import package1.Java_project539.Map;
+import package1.Java_project539.Ramp;
 import package1.Java_project539.Sprite;
 import package1.Java_project539.Tile;
 import package1.Java_project539.Object;
@@ -110,7 +112,7 @@ public class MapModeler
 	{
 		XMLOutputFactory xof = XMLOutputFactory.newInstance();
 		try {
-			XMLStreamWriter writer = xof.createXMLStreamWriter(new FileWriter(path));
+			XMLStreamWriter writer = xof.createXMLStreamWriter(new FileOutputStream(path),"utf-8");
 			//start document
 			writer.writeStartDocument("utf-8","1.0");
 			//identification element
@@ -170,6 +172,36 @@ public class MapModeler
 				//end level
 				writer.writeEndElement();
 			}
+			//start to save the ramp list
+			writer.writeStartElement("Ramps");
+			for(Ramp r : map.getRamps()){
+				Tile t1 = r.getTile(0);
+				Tile t2 = r.getTile(1);
+				int levelnum = t1.getLevel().getLevelnum();
+				writer.writeStartElement("Ramp");
+				
+				writer.writeStartElement("RampLevel");
+				writer.writeCharacters(String.valueOf(levelnum));
+				writer.writeEndElement();
+
+				writer.writeStartElement("RampTile1x");
+				writer.writeCharacters(String.valueOf(t1.getCoorX()));
+				writer.writeEndElement();
+				writer.writeStartElement("RampTile1y");
+				writer.writeCharacters(String.valueOf(t1.getCoorY()));
+				writer.writeEndElement();
+				writer.writeStartElement("RampTile2x");
+				writer.writeCharacters(String.valueOf(t2.getCoorX()));
+				writer.writeEndElement();
+				writer.writeStartElement("RampTile2y");
+				writer.writeCharacters(String.valueOf(t2.getCoorY()));
+				writer.writeEndElement();
+				
+				writer.writeEndElement();
+			}
+			
+			//end ramp list
+			writer.writeEndElement();
 			//end map
 			writer.writeEndElement();
 			//end mapmodel44
@@ -281,6 +313,27 @@ public class MapModeler
 								default://default we don't set anything
 							}
 							//System.out.println("Change tile " + x + "," + y + " with height:" + h + " object:"+o);
+						}else{
+							if(reader.getLocalName().equals("Ramps")&&event==XMLStreamConstants.START_ELEMENT){
+								reader.next();
+								while(reader.getLocalName().equals("Ramp")&&event==XMLStreamConstants.START_ELEMENT){
+									reader.next();reader.next();
+									int levelnum = Integer.parseInt(reader.getText());
+									reader.next();reader.next();reader.next();
+									int t1x = Integer.parseInt(reader.getText());
+									reader.next();reader.next();reader.next();
+									int t1y = Integer.parseInt(reader.getText()); 
+									reader.next();reader.next();reader.next();
+									int t2x = Integer.parseInt(reader.getText());
+									reader.next();reader.next();reader.next();
+									int t2y = Integer.parseInt(reader.getText()); 
+									reader.next();reader.next();reader.next();
+									//should stop at next Ramp now or </Ramps> but doesn't matter over here
+									Tile t1 = loadMap.getLevel(levelnum).getTileByXY(t1x,t1y);
+									Tile t2 = loadMap.getLevel(levelnum).getTileByXY(t2x,t2y);
+									loadMap.addRamp(new Ramp(t1,t2,loadMap));
+								}
+							}
 						}
 					}
 				}

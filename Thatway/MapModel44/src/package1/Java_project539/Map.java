@@ -248,7 +248,7 @@ public class Map
     return 0;
   }
 
-  public Ramp addRamp(Rectangle aRectangle)
+  public Ramp addRamp(MyRectangle aRectangle)
   {
     return new Ramp(aRectangle, this);
   }

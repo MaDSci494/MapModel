@@ -11,6 +11,8 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.*;
 
+import package1.Java_project539.Map;
+import package1.Java_project539.Ramp;
 import package1.Java_project539.Tile;
 
 import java.awt.*;
@@ -94,11 +96,19 @@ public class OptionsPanel extends JPanel
 	{
 		addRampButton.addMouseListener(new MouseAdapter()
 		{
-			public void mousePressed(MouseEvent e)
+			public void mouseClicked(MouseEvent e)
 			{
-				addRampButton.setSelected(true);// to make it appear selected // TODO remove it after it's used or cancelled
-				MapModeler.GetInstance().switchToRampsMode();  // should make it able to de-select the button,
-				
+				//addRampButton.setSelected(true);// to make it appear selected // TODO remove it after it's used or cancelled
+				//MapModeler.GetInstance().switchToRampsMode();  // should make it able to de-select the button,
+				LevelPanel l = (LevelPanel)leftpane.getSelectedComponent();
+				if(l.selectedTile.size()==2){
+					Tile t1 = l.selectedTile.get(0);
+					Tile t2 = l.selectedTile.get(1);
+					Map map = MapModeler.GetInstance().getMap();
+					map.addRamp(new Ramp(t1,t2,map));
+				}
+				l.selectedTile.clear();
+				l.repaint();
 			}
 
 			

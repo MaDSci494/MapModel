@@ -16,7 +16,7 @@ public class Ramp
   //------------------------
 
   //Ramp Associations
-  private Rectangle rectangle;
+  private MyRectangle rectangle;
   private Map map;
   private List<Tile> tiles;
 
@@ -24,7 +24,7 @@ public class Ramp
   // CONSTRUCTOR
   //------------------------
 
-  public Ramp(Rectangle aRectangle, Map aMap)
+  public Ramp(MyRectangle aRectangle, Map aMap)
   {
     if (aRectangle == null || aRectangle.getRamp() != null)
     {
@@ -41,7 +41,7 @@ public class Ramp
 
   public Ramp(Map aMap)
   {
-    rectangle = new Rectangle(this);
+    rectangle = new MyRectangle(this);
     boolean didAddMap = setMap(aMap);
     if (!didAddMap)
     {
@@ -49,12 +49,21 @@ public class Ramp
     }
     tiles = new ArrayList<Tile>();
   }
+  
+  //Ran:another constructor
+  public Ramp(Tile t1,Tile t2, Map aMap){
+	  tiles = new ArrayList<Tile>();
+	  addTile(t1);
+	  addTile(t2);
+	  map = aMap;
+	  rectangle = new MyRectangle(this);
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public Rectangle getRectangle()
+  public MyRectangle getRectangle()
   {
     return rectangle;
   }
@@ -191,7 +200,7 @@ public class Ramp
 
   public void delete()
   {
-    Rectangle existingRectangle = rectangle;
+    MyRectangle existingRectangle = rectangle;
     rectangle = null;
     if (existingRectangle != null)
     {
